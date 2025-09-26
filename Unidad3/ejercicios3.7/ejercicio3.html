@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Configuración de Estilo</title>
+</head>
+<body>
+  <h1>Configura tu página</h1>
+  <form action="ejercicio3.php" method="post">
+    <p>Color de fondo:</p>
+    <select name="color">
+      <option value="white">Blanco</option>
+      <option value="lightblue">Celeste</option>
+      <option value="lightgreen">Verde claro</option>
+      <option value="lightyellow">Amarillo claro</option>
+    </select>
+
+    <p>Tipo de letra:</p>
+    <select name="fuente">
+      <option value="Arial">Arial</option>
+      <option value="Times New Roman">Times New Roman</option>
+      <option value="Courier New">Courier New</option>
+      <option value="Verdana">Verdana</option>
+    </select>
+
+    <p>Alineación del texto:</p>
+    <select name="alineacion">
+      <option value="left">Izquierda</option>
+      <option value="center">Centrada</option>
+      <option value="right">Derecha</option>
+    </select>
+
+    <p>Banner:</p>
+    <input type="radio" name="banner" value="banner1.jpg" checked> Banner 1<br>
+    <input type="radio" name="banner" value="banner2.jpg"> Banner 2<br>
+    <input type="radio" name="banner" value="banner3.jpg"> Banner 3<br><br>
+
+    <input type="submit" value="Aplicar estilo">
+  </form>
+</body>
+</html>

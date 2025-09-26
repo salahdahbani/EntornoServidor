@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Documentos</title>
+</head>
+<body>
+  <h1>Calcula el tiempo para llenar el depósito cilíndrico</h1>
+  <form action="resultado.php" method="post">
+    <p>Diámetro del cilindro:</p>
+    <input type="number" step="0.01" name="diametro" required>
+
+    <p>Altura del cilindro:</p>
+    <input type="number" step="0.01" name="altura" required>
+
+    <p>Caudal :</p>
+    <input type="number" step="0.01" name="caudal" required>
+
+    <br><br>
+    <input type="submit" value="Calcular tiempo">
+  </form>
+</body>
+</html>
