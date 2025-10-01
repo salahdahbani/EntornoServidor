@@ -10,16 +10,12 @@
   <meta charset="UTF-8">
   <title>Documento</title>
 </head>
-<!-- Aplicamos el color con la etiqueta <body> -->
 <body bgcolor="<?php echo $color; ?>" text="black">
 
-  <!-- Mostramos la imagen -->
   <img src="<?php echo $banner; ?>" alt="Banner" width="100%" height="150">
 
-  <!-- Aplicamos alineación-->
   <div align="<?php echo $alineacion; ?>">
 
-    <!-- Aplicamos fuente -->
     <font face="<?php echo $fuente; ?>">
   <h1>Bienvenido a tu página personalizada</h1>
 

@@ -11,7 +11,7 @@
   $diametro = $_POST["diametro"];
 
   $radio = $diametro / 2;
-  $volumen = pi * ($radio * $radio) * $altura;
+  $volumen = pi() * ($radio * $radio) * $altura;
 ?>
 
   <h1>Calculo del volúmen de un cilindro</h1>
