@@ -7,8 +7,8 @@
 </head>
 <body>
     <?php
-    $cantidad = $_POST["cantidad"];
-    $serie_introducida = $_POST["serie"];
+    $cantidad = $_REQUEST["cantidad"];
+    $serie_introducida = $_REQUEST["serie"];
 
     $g1 = rand(1, 49);
     $g2 = rand(1, 49);
@@ -31,39 +31,18 @@
 
     <?php
 
-    $aciertos=0;
-    $numeroAciertos=0;
+    $numeroAciertos = 0;
+
+    if (isset($_REQUEST[$g1])) $numeroAciertos++;
+    if (isset($_REQUEST[$g2])) $numeroAciertos++;
+    if (isset($_REQUEST[$g3])) $numeroAciertos++;
+    if (isset($_REQUEST[$g4])) $numeroAciertos++;
+    if (isset($_REQUEST[$g5])) $numeroAciertos++;
+    if (isset($_REQUEST[$g6])) $numeroAciertos++;
+
 
     
-    if(isset($_REQUEST[$g1])){
-       $numeroAciertos++;
-        echo "Has acertado $numeroAciertos números";
-    }
-
-     if(isset($_REQUEST[$g2])){
-       $numeroAciertos++;
-        echo "Has acertado $numeroAciertos números";
-    }
-
-     if(isset($_REQUEST[$g3])){
-       $numeroAciertos++;
-        echo "Has acertado $numeroAciertos números";
-    }
-
-     if(isset($_REQUEST[$g4])){
-       $numeroAciertos++;
-        echo "Has acertado $numeroAciertos números";
-    }
-
-     if(isset($_REQUEST[$g5])){
-       $numeroAciertos++;
-        echo "Has acertado $numeroAciertos números";
-    }
-
-     if(isset($_REQUEST[$g6])){
-       $numeroAciertos++;
-        echo "Has acertado $numeroAciertos números";
-    }
+    echo "Has acertado $numeroAciertos números.<br>";
 
     if($numeroAciertos==0){
       echo "No has ganado";
@@ -97,6 +76,9 @@
           </table>
           <br>";
   ?>
+
+  <br>
+<a href="Ejercicio2.html">Volver a jugar</a>
     
 </body>
 </html>
