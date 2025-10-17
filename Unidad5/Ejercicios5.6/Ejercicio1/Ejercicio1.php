@@ -11,12 +11,9 @@
 $cuadrado = [];
 $cubo = [];
 
-// Llenar el array 'numero' con valores aleatorios entre 0 y 100
 for ($i = 0; $i < 20; $i++) {
     $num = rand(0, 100);
-    $numero[] = $num;
-    $cuadrado[] = $num ** 2;
-    $cubo[] = $num ** 3;
+    $numero[$i] = [$num, $num ** 2, $num ** 3];
 }
 
 ?>
@@ -28,10 +25,10 @@ for ($i = 0; $i < 20; $i++) {
     </tr>
     <?php
     for ($i = 0; $i < 20; $i++) {
-        echo "<tr>";
-        echo "<td>" . $numero[$i] . "</td>";
-        echo "<td>" . $cuadrado[$i] . "</td>";
-        echo "<td>" . $cubo[$i] . "</td>";
+         echo "<tr>";
+        foreach ($numero[$i] as $n) {
+        echo "<td>" . $n . "</td>";
+        }
         echo "</tr>";
     }
     ?>

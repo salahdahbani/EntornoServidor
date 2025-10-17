@@ -6,7 +6,7 @@
     <title>Ejercicio 10 - Brisca</title>                
 </head>
 <body>
-<h2>Ejercicio 10: Simulación de sacar 10 cartas de una baraja española y calcular puntos según Brisca</h2>
+<h2>Ejercicio 10: </h2>
 
 
 <?php
@@ -42,12 +42,11 @@ if (isset($_GET['jugar'])) {
         if (!in_array($indice, $indicesUsados)) {
             $indicesUsados[] = $indice;
             $cartasSeleccionadas[] = $baraja[$indice];
-            $i++; // solo incrementamos si la carta es nueva
+            $i++; 
         }
-        // Si ya existe, no incrementamos y se repite el intento
+       
     }
 
-    // Mostrar resultados
     $totalPuntos = 0;
     echo "<h3>Cartas seleccionadas:</h3><ul>";
     foreach ($cartasSeleccionadas as $carta) {
@@ -62,7 +61,6 @@ if (isset($_GET['jugar'])) {
 }
 ?>
 
-<!-- HTML simple para el formulario -->
 <form method="GET">
     <button type="submit" name="jugar" value="1">Sacar 10 cartas</button>
 </form>
