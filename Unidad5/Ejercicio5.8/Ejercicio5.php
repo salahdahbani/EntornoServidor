@@ -34,7 +34,7 @@ $finalizar = isset($_REQUEST['finalizar']);
 $asp_ser = base64_encode(serialize($aspirantes));
 ?>
 
-<?php if (!$finalizar): ?>
+<?php if (!$finalizar){ ?>
 <form method="post">
     Nombre: <input name="nombre"><br>
     Edad: <input name="edad" type="number"><br>
@@ -44,36 +44,36 @@ $asp_ser = base64_encode(serialize($aspirantes));
     <button name="add">Aceptar</button>
     <button name="finalizar">Finalizar</button>
 </form>
-<?php endif; ?>
+<?php } ?>
 
 <h3>Lista de aspirantes</h3>
 
-<?php if (count($aspirantes) === 0): ?>
+<?php if (count($aspirantes) === 0){ ?>
 <p>No hay aspirantes.</p>
-<?php else: ?>
+<?php }else{ ?>
 <table border="1">
     <tr><th>Nombre</th><th>Edad</th><th>Años exp</th><th>Correo</th></tr>
-    <?php foreach ($aspirantes as $n => $a): ?>
+    <?php foreach ($aspirantes as $n => $a){ ?>
     <tr>
-        <?php if ($a['edad'] > 30): ?>
+        <?php if ($a['edad'] > 30){ ?>
         <td style="color:red"><?php echo $n; ?></td>
         <td style="color:red"><?php echo $a['edad']; ?></td>
         <td style="color:red"><?php echo $a['exp']; ?></td>
         <td style="color:red"><?php echo $a['correo']; ?></td>
-        <?php else: ?>
+        <?php }else{ ?>
         <td><?php echo $n; ?></td>
         <td><?php echo $a['edad']; ?></td>
         <td><?php echo $a['exp']; ?></td>
         <td><?php echo $a['correo']; ?></td>
-        <?php endif; ?>
+        <?php } ?>
     </tr>
-    <?php endforeach; ?>
+    <?php } ?>
 </table>
-<?php endif; ?>
+<?php } ?>
 
-<?php if ($finalizar): ?>
+<?php if ($finalizar){ ?>
 <p>El listado ha finalizado.</p>
-<?php endif; ?>
+<?php } ?>
 
 </body>
 </html>

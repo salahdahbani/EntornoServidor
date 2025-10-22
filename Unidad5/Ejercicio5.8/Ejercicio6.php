@@ -25,7 +25,7 @@ $cvs_ser = base64_encode(serialize($cvs));
 
 <h2>Gestión de Curriculums</h2>
 
-<?php if ($crearCV && !$agregarCampo): ?>
+<?php if ($crearCV && !$agregarCampo){ ?>
     <h3>Nuevo CV: <?php echo $_REQUEST['nuevo_dni']; ?></h3>
     <form method="post">
         <input type="hidden" name="cvs" value="<?php echo $cvs_ser; ?>">
@@ -35,7 +35,7 @@ $cvs_ser = base64_encode(serialize($cvs));
         <button name="add_campo">Añadir campo</button>
         <button name="finalizar">Finalizar</button>
     </form>
-<?php elseif ($agregarCampo): ?>
+<?php }elseif ($agregarCampo){ ?>
     <?php
     $titulo = isset($_REQUEST['titulo']) ? $_REQUEST['titulo'] : '';
     $valor = isset($_REQUEST['valor']) ? $_REQUEST['valor'] : '';
@@ -52,28 +52,28 @@ $cvs_ser = base64_encode(serialize($cvs));
         <button name="add_campo">Añadir campo</button>
         <button name="finalizar">Finalizar</button>
     </form>
-<?php elseif (isset($_REQUEST['finalizar'])): ?>
+<?php }elseif (isset($_REQUEST['finalizar'])){ ?>
     <p>CV guardado para DNI: <?php echo $dniActual; ?></p>
     <form method="post">
         <input type="hidden" name="cvs" value="<?php echo $cvs_ser; ?>">
         <button name="volver">Volver a la página principal</button>
     </form>
-<?php elseif ($verCV): ?>
+<?php }elseif ($verCV){ ?>
     <h3>CV de DNI: <?php echo $verCV; ?></h3>
-    <?php if (isset($cvs[$verCV])): ?>
+    <?php if (isset($cvs[$verCV])){ ?>
         <table border="1">
-            <?php foreach ($cvs[$verCV] as $t => $v): ?>
+            <?php foreach ($cvs[$verCV] as $t => $v){ ?>
             <tr><td><?php echo $t; ?></td><td><?php echo $v; ?></td></tr>
-            <?php endforeach; ?>
+            <?php } ?>
         </table>
-    <?php else: ?>
+    <?php }else{ ?>
         <p>No existe CV para este DNI.</p>
-    <?php endif; ?>
+    <?php } ?>
     <form method="post">
         <input type="hidden" name="cvs" value="<?php echo $cvs_ser; ?>">
         <button name="volver">Volver al listado</button>
     </form>
-<?php else: ?>
+<?php }else{?>
     <h3>Página principal</h3>
     <form method="post">
         DNI: <input name="nuevo_dni"><br>
@@ -82,21 +82,21 @@ $cvs_ser = base64_encode(serialize($cvs));
     </form>
 
     <h3>Listado de CVs</h3>
-    <?php if (count($cvs) === 0): ?>
+    <?php if (count($cvs) === 0){ ?>
         <p>No hay CVs introducidos.</p>
-    <?php else: ?>
+    <?php }else {?>
         <ul>
-            <?php foreach ($cvs as $dni => $cv): ?>
+            <?php foreach ($cvs as $dni => $cv) { ?>
                 <li>
                     <form method="post" style="display:inline">
                         <input type="hidden" name="cvs" value="<?php echo $cvs_ser; ?>">
                         <button name="ver_dni" value="<?php echo $dni; ?>"><?php echo $dni; ?></button>
                     </form>
                 </li>
-            <?php endforeach; ?>
+            <?php } ?>
         </ul>
-    <?php endif; ?>
-<?php endif; ?>
+    <?php } ?>
+<?php } ?>
 
 </body>
 </html>

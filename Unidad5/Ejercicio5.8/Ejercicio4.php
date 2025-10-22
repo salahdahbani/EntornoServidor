@@ -77,14 +77,14 @@ if (isset($_REQUEST['formar'])) {
     <h3>Listado</h3>
     <table>
         <tr><th>#</th><th>Nombre</th><th>Sexo</th><th>Orient</th></tr>
-        <?php for ($i=0; $i<count($personas); $i++): ?>
+        <?php for ($i=0; $i<count($personas); $i++){ ?>
             <tr>
                 <td><?php echo $i; ?></td>
                 <td><?php echo $personas[$i]['nombre']; ?></td>
                 <td><?php echo $personas[$i]['sexo']; ?></td>
                 <td><?php echo $personas[$i]['orientacion']; ?></td>
             </tr>
-        <?php endfor; ?>
+        <?php } ?>
     </table>
 
 <?php elseif ($page === '2'): ?>
@@ -93,7 +93,7 @@ if (isset($_REQUEST['formar'])) {
         <input type="hidden" name="personas" value="<?php echo base64_encode(serialize($personas)); ?>">
         <table>
             <tr><th>#</th><th>Nombre</th><th>Sexo</th><th>Orient</th><th>Acción</th></tr>
-            <?php for ($i=0; $i<count($personas); $i++): ?>
+            <?php for ($i=0; $i<count($personas); $i++){ ?>
                 <tr <?php if (isset($_REQUEST['idx']) && $_REQUEST['idx']==$i) echo 'class="sel"'; ?>>
                     <td><?php echo $i; ?></td>
                     <td><?php echo $personas[$i]['nombre']; ?></td>
@@ -104,11 +104,11 @@ if (isset($_REQUEST['formar'])) {
                         <input type="hidden" name="idx" value="<?php echo $i; ?>">
                     </td>
                 </tr>
-            <?php endfor; ?>
+            <?php } ?>
         </table>
     </form>
 
-    <?php if (isset($_REQUEST['idx'])): ?>
+    <?php if (isset($_REQUEST['idx'])){ ?>
         <?php $sel = $_REQUEST['idx']; ?>
         <h3>Compatibles con <?php echo $personas[$sel]['nombre']; ?></h3>
         <form method="post">
@@ -116,7 +116,7 @@ if (isset($_REQUEST['formar'])) {
             <input type="hidden" name="idx1" value="<?php echo $sel; ?>">
             <table>
                 <tr><th>#</th><th>Nombre</th><th>Sexo</th><th>Orient</th><th>Acción</th></tr>
-                <?php for ($j=0; $j<count($personas); $j++): ?>
+                <?php for ($j=0; $j<count($personas); $j++){ ?>
                     <?php if ($j == $sel) continue; ?>
                     <?php
                         $a = $personas[$sel];
@@ -130,7 +130,7 @@ if (isset($_REQUEST['formar'])) {
                             if (!($b['orientacion']==='het' && $a['sexo']===$b['sexo']) && !($b['orientacion']==='hom' && $a['sexo']!==$b['sexo'])) $comp = true;
                         }
                     ?>
-                    <?php if ($comp): ?>
+                    <?php if ($comp){ ?>
                         <tr>
                             <td><?php echo $j; ?></td>
                             <td><?php echo $b['nombre']; ?></td>
@@ -141,20 +141,20 @@ if (isset($_REQUEST['formar'])) {
                                 <input type="hidden" name="idx2" value="<?php echo $j; ?>">
                             </td>
                         </tr>
-                    <?php endif; ?>
-                <?php endfor; ?>
+                    <?php } ?>
+                <?php } ?>
             </table>
         </form>
-    <?php endif; ?>
+    <?php } ?>
 
     <p><a href="?page=1&personas=<?php echo base64_encode(serialize($personas)); ?>">Volver a introducir</a></p>
 
-<?php elseif ($page === '3'): ?>
+<?php elseif ($page === '3') : ?>
     <h2>Pareja formada</h2>
     <?php
         $idx1 = isset($_REQUEST['idx1']) ? $_REQUEST['idx1'] : null;
         $idx2 = isset($_REQUEST['idx2']) ? $_REQUEST['idx2'] : null;
-        if ($idx1!==null && $idx2!==null && isset($personas[$idx1]) && isset($personas[$idx2])):
+        if ($idx1!==null && $idx2!==null && isset($personas[$idx1]) && isset($personas[$idx2])){
             $A = $personas[$idx1];
             $B = $personas[$idx2];
     ?>
@@ -163,9 +163,9 @@ if (isset($_REQUEST['formar'])) {
             <tr><td><?php echo $A['nombre'].' ('.$A['sexo'].'/'.$A['orientacion'].')'; ?></td>
                 <td><?php echo $B['nombre'].' ('.$B['sexo'].'/'.$B['orientacion'].')'; ?></td></tr>
         </table>
-    <?php else: ?>
+    <?php } else{ ?>
         <p>Índices inválidos.</p>
-    <?php endif; ?>
+    <?php } ?>
 
     <p><a href="?page=2&personas=<?php echo base64_encode(serialize($personas)); ?>">Volver a parejas</a></p>
 

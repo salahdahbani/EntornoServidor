@@ -65,9 +65,9 @@ $pedido_serializado = serialize($pedido);
             <legend>Pizza</legend>
             <label>Variante:
                 <select name="pizza_variante">
-                    <?php foreach ($menu['Pizza'] as $v): ?>
+                    <?php foreach ($menu['Pizza'] as $v){ ?>
                         <option value="<?php echo $v; ?>"><?php echo ucfirst($v); ?></option>
-                    <?php endforeach; ?>
+                    <?php } ?>
                 </select>
             </label>
             <div>
@@ -87,9 +87,9 @@ $pedido_serializado = serialize($pedido);
         <fieldset>
             <legend>Hamburguesa</legend>
             <p>Ingredientes:</p>
-            <?php foreach ($menu['Hamburguesa'] as $ing): ?>
+            <?php foreach ($menu['Hamburguesa'] as $ing){ ?>
                 <label><input type="checkbox" name="hamburguesa_ingred[]" value="<?php echo $ing; ?>"> <?php echo ucfirst($ing); ?></label>
-            <?php endforeach; ?>
+            <?php } ?>
             <input type="hidden" name="order" value="<?php echo $pedido_serializado; ?>">
             <div class="controls">
                 <button type="submit" name="add_hamburguesa">Añadir Hamburguesa</button>
@@ -101,9 +101,9 @@ $pedido_serializado = serialize($pedido);
         <fieldset>
             <legend>Perrito Caliente</legend>
             <p>Ingredientes:</p>
-            <?php foreach ($menu['Perrito'] as $ing): ?>
+            <?php foreach ($menu['Perrito'] as $ing){ ?>
                 <label><input type="checkbox" name="perrito_ingred[]" value="<?php echo $ing; ?>"> <?php echo ucfirst($ing); ?></label>
-            <?php endforeach; ?>
+            <?php } ?>
             <input type="hidden" name="order" value="<?php echo $pedido_serializado; ?>">
             <div class="controls">
                 <button type="submit" name="add_perrito">Añadir Perrito</button>
@@ -121,11 +121,11 @@ $pedido_serializado = serialize($pedido);
 
     <hr>
 
-    <?php if ($finalizado): ?>
+    <?php if ($finalizado){ ?>
         <h2>Pedido finalizado</h2>
-        <?php if (count($pedido) === 0): ?>
+        <?php if (count($pedido) === 0){ ?>
             <p>No hay elementos en el pedido.</p>
-        <?php else: ?>
+        <?php }else{ ?>
             <table>
                 <thead>
                     <tr>
@@ -136,22 +136,22 @@ $pedido_serializado = serialize($pedido);
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($pedido as $i => $item): ?>
+                    <?php foreach ($pedido as $i => $item){ ?>
                         <tr>
                             <td><?php echo $i + 1; ?></td>
                             <td><?php echo $item['tipo']; ?></td>
                             <td><?php echo $item['variante']; ?></td>
                             <td><?php echo implode(', ', $item['ingredientes']); ?></td>
                         </tr>
-                    <?php endforeach; ?>
+                    <?php } ?>
                 </tbody>
             </table>
-        <?php endif; ?>
-    <?php else: ?>
+        <?php } ?>
+    <?php }else{ ?>
         <h2>Pedido en curso</h2>
-        <?php if (count($pedido) === 0): ?>
+        <?php if (count($pedido) === 0){ ?>
             <p>Aún no has añadido nada al pedido.</p>
-        <?php else: ?>
+        <?php }else{ ?>
             <table>
                 <thead>
                     <tr>
@@ -162,18 +162,18 @@ $pedido_serializado = serialize($pedido);
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($pedido as $i => $item): ?>
+                    <?php foreach ($pedido as $i => $item){ ?>
                         <tr>
                             <td><?php echo $i + 1; ?></td>
                             <td><?php echo $item['tipo']; ?></td>
                             <td><?php echo $item['variante']; ?></td>
                             <td><?php echo implode(', ', $item['ingredientes']); ?></td>
                         </tr>
-                    <?php endforeach; ?>
+                    <?php } ?>
                 </tbody>
             </table>
-        <?php endif; ?>
-    <?php endif; ?>
+        <?php } ?>
+    <?php } ?>
 
 </body>
 </html>
