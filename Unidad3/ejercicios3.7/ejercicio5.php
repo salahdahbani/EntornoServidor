@@ -12,7 +12,7 @@
     $caudal= $_POST["caudal"];
     $radio= $diametro/2;
 
-    $volumen= pi() * $radio* $radio *$altur+a;
+    $volumen= pi() * $radio* $radio *$altura;
     $volumen_litros= $volumen * 1000;
 
     $tiempo=round ($volumen_litros / $caudal, 2);
