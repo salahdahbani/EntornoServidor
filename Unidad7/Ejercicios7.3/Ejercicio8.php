@@ -1,6 +1,6 @@
 <?php
   // Actualizar las cookies
-  if ($_POST['accion'] == "actualizarCookies") {
+ if (isset($_POST['accion']) && $_POST['accion'] == "actualizarCookies") {
     foreach ($_SESSION['diccionario'] as $espanol => $ingles) {
       setcookie($espanol, $ingles, time() + 365 * 24 * 3600);
     }
@@ -14,9 +14,9 @@
   }
   
   // Borrado de cookies y variables
-  if ($_POST['accion'] == "borrarCookies") {
+  if (isset($_POST['accion']) && $_POST['accion'] == "borrarCookies") {
     foreach ($_SESSION['diccionario'] as $espanol) {
-      setcookie($espanol, NULL, -1);
+      setcookie($espanol, "", -1);
     }
     unset($_SESSION['diccionario']);
   }

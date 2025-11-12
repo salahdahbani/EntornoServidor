@@ -8,7 +8,7 @@
   
   // Borrado de cookies y variables
   if ($_POST['accion'] == "borrarCookies") {
-    setcookie("producto", NULL, -1);
+    setcookie("producto", "", -1);
     unset($_COOKIE['producto']);
     unset($_SESSION['producto']);
     $_SESSION['pagina'] = "pagina.php?ejercicio=09";
