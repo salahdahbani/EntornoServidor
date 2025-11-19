@@ -75,25 +75,36 @@ if(!isset($_SESSION['mascotas'])){
     </table>
 
     <?php 
-    if(isset($_POST['grabar'])){
-        session_destroy();
-        $archivo = fopen("mascotas.txt", "a");
-        foreach($_SESSION['mascotas'] as $mascota => $datos){
-            if(!$fechaActual){
-                fwrite($archivo ,$fechaActual . PHP_EOL);
-                $linea = $datos['nombre'] . "," . $datos['animal'] . "," . $datos['edad'] . PHP_EOL;
-                fwrite($archivo, $linea);
-            }elseif($fechaActual != "#".date("d/m/Y")."#"){
-                $lineaFecha = PHP_EOL . $fechaActual . PHP_EOL;
-                fwrite($archivo, $lineaFecha);
-                $linea = $datos['nombre'] . "," . $datos['animal'] . "," . $datos['edad'] . PHP_EOL;
-                fwrite($archivo, $linea);
-            }
-            
-        }
-        fclose($archivo);
-        echo "<p>Datos grabados en mascotas.txt</p>";
+    if (isset($_POST['grabar'])) {
+    $existeFecha = mirarFecha($fechaActual);
+    $archivo = fopen("mascotas.txt", "a");
+    if (!$existeFecha) {
+        fwrite($archivo, $fecha . PHP_EOL);
     }
+    foreach ($_SESSION['mascotas'] as $mascota => $datos) {
+        fwrite($archivo, $datos['nombre'] . "-" . $datos['animal'] . "-" . $datos['edad'] . PHP_EOL);
+    }
+    fclose($archivo);
+    session_destroy();
+    header("refresh: 0");
+}
+
+function mirarFecha($fechaActual)
+{
+    if(!file_exists("mascotas.txt")) return false;
+
+    $file = fopen("mascotas.txt", "r");
+
+    while (($linea = fgets($file)) !== false) {
+        if (trim($linea) === $fechaActual ) {
+            fclose($file);
+            return true;
+        }
+    }
+    fclose($file);
+    return false;
+}
+
     ?>
     
 

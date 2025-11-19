@@ -1,0 +1,56 @@
+        * {
+            font-family: sans-serif;
+        }
+
+        a {
+            text-decoration: none;
+
+        }
+
+        table,
+        tr,
+        td {
+            border: 2px solid rgb(212, 212, 212);
+            border-collapse: collapse;
+        }
+
+        table {
+            margin: auto;
+            border: 9px solid rgb(212, 212, 212);
+            box-shadow: 3px 3px 4px gray;
+        }
+
+        td {
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        img {
+            width: 150px;
+            height: 100px;
+        }
+
+        .headerTabla {
+            background-color: rgb(119, 136, 153);
+        }
+
+        .titulos,
+        a {
+            color: white;
+            text-shadow: 1px 1px red;
+        }
+
+        .tienda {
+            color: white;
+            text-shadow: 1px 1px 1px black;
+        }
+
+        .botonComprar {
+            padding: 60px;
+        }
+
+        .suma{
+            margin: 0;
+        }
