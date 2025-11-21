@@ -1,6 +1,7 @@
 <?php
 include_once "Empleado.php";
 session_start();
+$anonimo = "Anónimo";
 if(!isset($_SESSION['empleados'])){
     $_SESSION['empleados'] = [];
 }
@@ -12,13 +13,17 @@ if(isset($_POST['enviar'])){
     $asigno = $_POST['asigno'];
     $dato = new Empleado($nombre, $sueldo);
 
-    // Corregir typo en la sesión
+
+    // Corregir tipo en la sesión
     $_SESSION['empleados'][] = [
         'nombre' => $nombre,
         'sueldo' => $sueldo,
         'asigno' => $asigno,
         'dato' => $dato
     ];
+}
+if(isset($_POST['destruir'])){
+    session_destroy();
 }
 ?>
 
@@ -61,14 +66,18 @@ if(isset($_POST['enviar'])){
 
 <form method="post">
     <label>Introduce el nombre del empleado:</label>
-    <input type="text" name="nombre" required> <br>
+    <input type="text" name="nombre" required > <br>
     <label>Introduce el sueldo del empleado:</label>
     <input type="number" name="sueldo" required> <br>
     <label>Introduce el sueldo que quiere asignarle:</label>
-    <input type = "number" name="asigno" > <br>
-    <input type="submit" name="enviar">
+    <input type = "number" name="asigno"> <br>
+    <input type="submit" name="enviar" value="Añadir">
 </form>
 <br><br>
+
+<form method="post">
+    <input type = "submit" name="destruir" value="destruir">
+</form>
 
 </body>
 </html>

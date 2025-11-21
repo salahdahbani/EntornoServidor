@@ -20,7 +20,7 @@ class Empleado {
 
     public function impuestos()
     {
-        if($this->sueldo >= 3000){
+        if($this->sueldo > 3000){
             return $this->nombre. " debe pagar impuestos";
         }else {
             return $this->nombre. " no paga impuestos";
