@@ -1,14 +1,19 @@
 <?php
 class Menu{
-    private $titulo=[];
-    private $enlace=[];
+    private $titulo;
+    private $enlace;
 
-    
-
-    public function añadirElemento($tit, $en)
+    public function __construct()
     {
-        $this->titulo[] = $tit;
-        $this->enlace[] = $en;
+        $this->titulo = [];
+        $this->enlace = [];
+    }
+
+
+    public function aniadirElemento($titulo, $enlace)
+    {
+        $this->titulo[] = $titulo;
+        $this->enlace[] = $enlace;
     }
 
     public function horizontal()
