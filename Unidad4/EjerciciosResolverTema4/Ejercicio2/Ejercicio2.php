@@ -54,15 +54,15 @@
     }
 
     if($numeroAciertos==5){
-      echo "Has ganado  " + ($cantidad + 30)  + " euros";
+      echo "Has ganado  " . ($cantidad + 30)  . " euros";
     }
 
     if($numeroAciertos==6){
-      echo "Has ganado  " + ($cantidad + 100)  + " euros";
+      echo "Has ganado  " . ($cantidad + 100)  . " euros";
     }
 
     if($serie_introducida==$serie_generada){
-      echo "Has ganado  " + ($cantidad + 500)  + " euros";
+      echo "Has ganado  " . ($cantidad + 500)  . " euros";
     }
   
     
