@@ -9,8 +9,20 @@ if(!isset($_SESSION['contenido'])){
     $_SESSION['contenido'][]=[]; 
 }
 
+if(isset($_POST['add'])){
+$titulo = $_POST['titulo'];
+$texto = $_POST['texto'];
+$fecha = date("d/m/Y");
+$hora = date("H:i:s");
 
-
+$_SESSION['contenido'][]=[
+        'titulo'=> $titulo,
+        'texto' => $texto,
+        'fecha'  => $fecha,
+        'hora'  => $hora
+    ];
+    
+    }
 
 if(isset($_POST['entrar'])){
 $user = $_POST['user'];
@@ -85,21 +97,5 @@ $_SESSION['user']=[
         <input type="submit" name="logout" value="Cerrar sesión">
     </form>
 
-<?php
-   if(isset($_POST['add'])){
-    $titulo = $_POST['titulo'];
-    $texto = $_POST['texto'];
-    $fecha = date("d/m/Y");
-    $hora = date("H:i:s");
-
-    $_SESSION['contenido'][]=[
-        'titulo'=> $titulo,
-        'texto' => $texto,
-        'fecha'  => $fecha,
-        'hora'  => $hora
-    ];
-    
-    }
-       ?>
 </body>
 </html>
