@@ -1,5 +1,6 @@
 <?php
 include_once "Menu.php";
+<<<<<<< HEAD
 session_start();
 
 if(!isset($_SESSION['menu'])){
@@ -14,6 +15,23 @@ if(isset($_POST['enviar'])){
     $menu->aniadirElemento($_POST['titulo'], $_POST['enlace']);
     $_SESSION['menu'] = base64_encode(serialize($menu));
 }
+=======
+$menu = new Menu();
+$menu_html = '';
+if(!isset($_POST['titulo'])){
+$titulo=[];
+$enlace=[];
+}else{
+    $titulo = $_POST['titulo'];
+    $enlace = $_POST['enlace'];
+}
+
+
+for ($i = 0; $i < count($titulo); $i++) {
+    $menu->añadirElemento($titulo[$i], $enlace[$i]);
+}
+
+>>>>>>> 80591ae (Trabajo local: cambios en Unidad9/Ejercicio2 (respaldo))
 if(isset($_POST['mostrar'])){
     if($_POST['tipo_menu'] == "horizontal"){
         $menu_html = $menu->horizontal();
