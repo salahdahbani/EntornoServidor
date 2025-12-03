@@ -1,0 +1,404 @@
+[1mdiff --git a/EjercicioExamen/login.php b/EjercicioExamen/login.php[m
+[1mnew file mode 100755[m
+[1mindex 0000000..dc46cd4[m
+[1m--- /dev/null[m
+[1m+++ b/EjercicioExamen/login.php[m
+[36m@@ -0,0 +1,75 @@[m
+[32m+[m[32m<?php[m
+[32m+[m[32m$archivo = "usuarios.txt" ;[m
+[32m+[m[32mif(session_status() == PHP_SESSION_NONE) session_start();[m
+[32m+[m[32m//Inicializamos la sesion[m
+[32m+[m[32mif(!isset($_SESSION['user'])){[m
+[32m+[m[32m    $_SESSION['user']=[];[m[41m [m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32mif(isset($_POST['entrar'])){[m
+[32m+[m[32m$user = $_POST['user'];[m
+[32m+[m[32m$contra = $_POST['passw'];[m
+[32m+[m[32m$datos = "$user, $contra";[m
+[32m+[m[32m$_SESSION['user']=[[m
+[32m+[m[32m    'user'=> $user,[m
+[32m+[m[32m    'contra' => $contra,[m
+[32m+[m[32m];[m
+[32m+[m
+[32m+[m
+[32m+[m[32m    $existeUsuario = mirarDatos($datos);[m
+[32m+[m[32m    $archivo = fopen("usuarios.txt", "a");[m
+[32m+[m[32m    if (!$existeUsuario) {[m
+[32m+[m[32m        echo "<p style='red';>Este usuario no esta registrado </p>";[m
+[32m+[m[32m    }else{[m
+[32m+[m[41m      [m
+[32m+[m[41m    [m
+[32m+[m[32m    fclose($archivo);[m
+[32m+[m[32m    header("Location: principal.php");[m
+[32m+[m[32m    exit();[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32mfunction mirarDatos($datos)[m
+[32m+[m[32m{[m
+[32m+[m[32m    if(!file_exists("usuarios.txt")) return false;[m
+[32m+[m
+[32m+[m[32m    $file = fopen("usuarios.txt", "r");[m
+[32m+[m
+[32m+[m[32m    while (($linea = fgets($file)) !== false) {[m
+[32m+[m[32m        if (trim($linea) === $datos ) {[m
+[32m+[m[32m            fclose($file);[m
+[32m+[m[32m            return true;[m
+[32m+[m[32m        }[m
+[32m+[m[32m    }[m
+[32m+[m[32m    fclose($file);[m
+[32m+[m[32m    return false;[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32m?>[m
+[32m+[m[32m<!DOCTYPE html>[m
+[32m+[m[32m<html lang="en">[m
+[32m+[m[32m<head>[m
+[32m+[m[32m    <meta charset="UTF-8">[m
+[32m+[m[32m    <meta name="viewport" content="width=device-width, initial-scale=1.0">[m
+[32m+[m[32m    <title>Document</title>[m
+[32m+[m[32m</head>[m
+[32m+[m[32m<body>[m
+[32m+[m
+[32m+[m[32m<form method="post" >[m
+[32m+[m[32m    <label>Introduce tu usuario:</label>[m
+[32m+[m[32m    <input type="text" name="user">[m
+[32m+[m[32m    <br>[m
+[32m+[m[32m    <label>Contraseña:</label>[m
+[32m+[m[32m    <input type="password" name="passw">[m
+[32m+[m[32m    <br>[m
+[32m+[m[32m    <input type="hidden" value="<?php echo $_SESSION['user']?>">[m
+[32m+[m[32m    <input type="submit" value="Entrar" name="entrar">[m
+[32m+[m[32m</form>[m
+[32m+[m[32m<form method="post" action="registro.php">[m
+[32m+[m[32m    <input type="submit" value="Registrarse" name="registro">[m
+[32m+[m[32m</form>[m
+[32m+[m[41m    [m
+[32m+[m[32m</body>[m
+[32m+[m[32m</html>[m
+\ No newline at end of file[m
+[1mdiff --git a/EjercicioExamen/principal.php b/EjercicioExamen/principal.php[m
+[1mnew file mode 100644[m
+[1mindex 0000000..82acd60[m
+[1m--- /dev/null[m
+[1m+++ b/EjercicioExamen/principal.php[m
+[36m@@ -0,0 +1,105 @@[m
+[32m+[m[32m<?php[m
+[32m+[m[32mif(session_status() == PHP_SESSION_NONE) session_start();[m
+[32m+[m[32m//Inicializamos la sesion[m
+[32m+[m[32mif(!isset($_SESSION['user'])){[m
+[32m+[m[32m    $_SESSION['user']=[];[m[41m [m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32mif(!isset($_SESSION['contenido'])){[m
+[32m+[m[32m    $_SESSION['contenido'][]=[];[m[41m [m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m[32mif(isset($_POST['entrar'])){[m
+[32m+[m[32m$user = $_POST['user'];[m
+[32m+[m[32m$_SESSION['user']=[[m
+[32m+[m[32m    'user'=> $user,[m
+[32m+[m[32m];[m[41m [m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m
+[32m+[m[32m?>[m
+[32m+[m[32m<!DOCTYPE html>[m
+[32m+[m[32m<html lang="en">[m
+[32m+[m[32m<head>[m
+[32m+[m[32m    <meta charset="UTF-8">[m
+[32m+[m[32m    <meta name="viewport" content="width=device-width, initial-scale=1.0">[m
+[32m+[m[32m    <title>Document</title>[m
+[32m+[m[32m</head>[m
+[32m+[m[32m<body>[m
+[32m+[m[32m    <h1>Panel de notas del usuario <?php echo isset($_SESSION['user']['user']) ? $_SESSION['user']['user'] : ''; ?></h1>[m
+[32m+[m
+[32m+[m[32m    <h5>Última nota creada:<?php echo !empty($_SESSION['contenido']) ? end($_SESSION['contenido'])['titulo'] : 'Ninguna'; ?></h5>[m
+[32m+[m
+[32m+[m
+[32m+[m[32m     <table border="1">[m
+[32m+[m[32m        <tr>[m
+[32m+[m[32m            <td>Título</td>[m
+[32m+[m[32m            <td>Fecha</td>[m
+[32m+[m[32m            <td>Hora</td>[m
+[32m+[m[32m            <td>Texto</td>[m
+[32m+[m[41m            [m
+[32m+[m
+[32m+[m[32m        </tr>[m
+[32m+[m[41m        [m
+[32m+[m[32m        <?php[m
+[32m+[m[32m        foreach($_SESSION['contenido'] as $nota){[m[41m   [m
+[32m+[m[32m            echo "<tr>";[m
+[32m+[m[32m            echo "<td>" . $nota['titulo'] . "</td>";[m
+[32m+[m[32m            echo "<td>" . $nota['fecha'] . "</td>";[m
+[32m+[m[32m            echo "<td>" . $nota['hora'] . "</td>";[m
+[32m+[m[32m             echo "<td>" . $nota['texto'] . "</td>";[m
+[32m+[m[32m            echo "</tr>";[m
+[32m+[m[32m        }[m
+[32m+[m[32m        ?>[m
+[32m+[m
+[32m+[m[32m     </table>[m
+[32m+[m[32m     <br>[m
+[32m+[m[32m     <br>[m
+[32m+[m[32m      <?php[m[41m [m
+[32m+[m[32m    if(isset($_POST['logout'])){[m
+[32m+[m[32m        session_destroy();[m
+[32m+[m[32m        header("Location: login.php");[m
+[32m+[m[32m    exit();[m
+[32m+[m
+[32m+[m[32m    }[m
+[32m+[m[32m       ?>[m
+[32m+[m[41m    [m
+[32m+[m
+[32m+[m[32m   <h4>Añadir nota nueva</h4>[m
+[32m+[m
+[32m+[m[32m    <form method="post">[m
+[32m+[m[32m        <label>TÍTULO</label>[m
+[32m+[m[32m        <input type="text" name="titulo">[m
+[32m+[m[32m        <br>[m
+[32m+[m[32m        <br>[m
+[32m+[m[32m        <label>TEXTO</label>[m
+[32m+[m[32m        <input type="text" name="texto" size="100">[m
+[32m+[m[32m        <br>[m
+[32m+[m[32m        <br>[m
+[32m+[m[32m        <input type="submit" name="add" value="Añadir">[m
+[32m+[m[32m        <br>[m
+[32m+[m[32m        <br>[m
+[32m+[m[32m        <input type="submit" name="logout" value="Cerrar sesión">[m
+[32m+[m[32m    </form>[m
+[32m+[m
+[32m+[m[32m<?php[m
+[32m+[m[32m   if(isset($_POST['add'])){[m
+[32m+[m[32m    $titulo = $_POST['titulo'];[m
+[32m+[m[32m    $texto = $_POST['texto'];[m
+[32m+[m[32m    $fecha = date("d/m/Y");[m
+[32m+[m[32m    $hora = date("H:i:s");[m
+[32m+[m
+[32m+[m[32m    $_SESSION['contenido'][]=[[m
+[32m+[m[32m        'titulo'=> $titulo,[m
+[32m+[m[32m        'texto' => $texto,[m
+[32m+[m[32m        'fecha'  => $fecha,[m
+[32m+[m[32m        'hora'  => $hora[m
+[32m+[m[32m    ];[m
+[32m+[m[41m    [m
+[32m+[m[32m    }[m
+[32m+[m[32m       ?>[m
+[32m+[m[32m</body>[m
+[32m+[m[32m</html>[m
+\ No newline at end of file[m
+[1mdiff --git a/EjercicioExamen/registro.php b/EjercicioExamen/registro.php[m
+[1mnew file mode 100755[m
+[1mindex 0000000..9c8cd80[m
+[1m--- /dev/null[m
+[1m+++ b/EjercicioExamen/registro.php[m
+[36m@@ -0,0 +1,72 @@[m
+[32m+[m[32m<?php[m
+[32m+[m[32m$archivo = "usuarios.txt" ;[m
+[32m+[m[32mif(session_status() == PHP_SESSION_NONE) session_start();[m
+[32m+[m[32m//Inicializamos la sesion[m
+[32m+[m[32mif(!isset($_SESSION['user'])){[m
+[32m+[m[32m    $_SESSION['user']=[];[m[41m [m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32mif(isset($_POST['añadir'])){[m
+[32m+[m[32m$user = $_POST['user'];[m
+[32m+[m[32m$contra = $_POST['passw'];[m
+[32m+[m[32m$datos = "$user, $contra";[m
+[32m+[m[32m$_SESSION['user'][] = [[m
+[32m+[m[32m            'user' => $user,[m
+[32m+[m[32m            'contra' => $contra[m
+[32m+[m[32m  ];[m
+[32m+[m
+[32m+[m[32m    $existeUsuario = mirarDatos($datos);[m
+[32m+[m[32m    $archivo = fopen("usuarios.txt", "a");[m
+[32m+[m[32m    if (!$existeUsuario) {[m
+[32m+[m[32m        fwrite($archivo, $datos . PHP_EOL);[m
+[32m+[m[32m    }[m
+[32m+[m[32m    foreach ($_SESSION['user'] as $usuario => $datos) {[m
+[32m+[m[32m        fwrite($archivo, $datos['user'] . "," . $datos['contra'] . PHP_EOL);[m
+[32m+[m[32m    }[m
+[32m+[m[32m    fclose($archivo);[m
+[32m+[m[32m    session_destroy();[m
+[32m+[m[32m    header("refresh: 0");[m
+[32m+[m
+[32m+[m[32m}[m
+[32m+[m[32mfunction mirarDatos($datos)[m
+[32m+[m[32m{[m
+[32m+[m[32m    if(!file_exists("usuarios.txt")) return false;[m
+[32m+[m
+[32m+[m[32m    $file = fopen("usuarios.txt", "r");[m
+[32m+[m
+[32m+[m[32m    while (($linea = fgets($file)) !== false) {[m
+[32m+[m[32m        if (trim($linea) === $datos ) {[m
+[32m+[m[32m            fclose($file);[m
+[32m+[m[32m            return true;[m
+[32m+[m[32m        }[m
+[32m+[m[32m    }[m
+[32m+[m[32m    fclose($file);[m
+[32m+[m[32m    return false;[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[41m    [m
+[32m+[m[32m?>[m
+[32m+[m[32m<!DOCTYPE html>[m
+[32m+[m[32m<html lang="en">[m
+[32m+[m[32m<head>[m
+[32m+[m[32m    <meta charset="UTF-8">[m
+[32m+[m[32m    <meta name="viewport" content="width=device-width, initial-scale=1.0">[m
+[32m+[m[32m    <title>Document</title>[m
+[32m+[m[32m</head>[m
+[32m+[m[32m<body>[m
+[32m+[m
+[32m+[m[32m<form method="post">[m
+[32m+[m[32m    <label>Introduce tu usuario:</label>[m
+[32m+[m[32m    <input type="text" name="user">[m
+[32m+[m[32m    <br>[m
+[32m+[m[32m    <label>Contraseña:</label>[m
+[32m+[m[32m    <input type="password" name="passw">[m
+[32m+[m[32m    <br>[m
+[32m+[m[32m    <input type="submit" value="Añadir" name="añadir">[m
+[32m+[m[32m</form>[m
+[32m+[m[32m<br>[m
+[32m+[m[32m<br>[m
+[32m+[m[32m<a href="login.php">Volver al login</a>[m
+[32m+[m[41m    [m
+[32m+[m[32m</body>[m
+[32m+[m[32m</html>[m
+\ No newline at end of file[m
+[1mdiff --git a/EjercicioExamen/usuarios.txt b/EjercicioExamen/usuarios.txt[m
+[1mnew file mode 100644[m
+[1mindex 0000000..bcedfcf[m
+[1m--- /dev/null[m
+[1m+++ b/EjercicioExamen/usuarios.txt[m
+[36m@@ -0,0 +1,8 @@[m
+[32m+[m[32mJuan, 1234[m
+[32m+[m[32mJuan,1234[m
+[32m+[m[32mJuan,1234[m
+[32m+[m[32mJuan,1234[m
+[32m+[m[32msalah, 1234[m
+[32m+[m[32msalah,1234[m
+[32m+[m[32mYari, 1111[m
+[32m+[m[32mJuan, ihh[m
+[1mdiff --git "a/SimulacroExamenTemas3-9/Demostraci\303\263n.mp4" "b/SimulacroExamenTemas3-9/Demostraci\303\263n.mp4"[m
+[1mnew file mode 100755[m
+[1mindex 0000000..5bb26c8[m
+Binary files /dev/null and "b/SimulacroExamenTemas3-9/Demostraci\303\263n.mp4" differ
+[1mdiff --git a/SimulacroExamenTemas3-9/Enunciado.pdf b/SimulacroExamenTemas3-9/Enunciado.pdf[m
+[1mnew file mode 100755[m
+[1mindex 0000000..4f2a8d4[m
+Binary files /dev/null and b/SimulacroExamenTemas3-9/Enunciado.pdf differ
+[1mdiff --git a/Unidad8/EjerciciosPracticas/Ejercicio1/ejercicio1.php b/Unidad8/EjerciciosPracticas/Ejercicio1/ejercicio1.php[m
+[1mold mode 100644[m
+[1mnew mode 100755[m
+[1mdiff --git a/Unidad8/EjerciciosPracticas/Ejercicio1/ejercicio2.php b/Unidad8/EjerciciosPracticas/Ejercicio1/ejercicio2.php[m
+[1mold mode 100644[m
+[1mnew mode 100755[m
+[1mdiff --git a/Unidad8/EjerciciosPracticas/Ejercicio1/mascotas.txt b/Unidad8/EjerciciosPracticas/Ejercicio1/mascotas.txt[m
+[1mnew file mode 100644[m
+[1mindex 0000000..70cb5c0[m
+[1m--- /dev/null[m
+[1m+++ b/Unidad8/EjerciciosPracticas/Ejercicio1/mascotas.txt[m
+[36m@@ -0,0 +1,2 @@[m
+[32m+[m
+[32m+[m[32msalah-ej-4[m
+[1mdiff --git a/Unidad8/EjerciciosPracticas/Ejercicio3/Cesta.php b/Unidad8/EjerciciosPracticas/Ejercicio3/Cesta.php[m
+[1mold mode 100644[m
+[1mnew mode 100755[m
+[1mdiff --git a/Unidad8/EjerciciosPracticas/Ejercicio3/css/Cesta.css b/Unidad8/EjerciciosPracticas/Ejercicio3/css/Cesta.css[m
+[1mold mode 100644[m
+[1mnew mode 100755[m
+[1mdiff --git a/Unidad8/EjerciciosPracticas/Ejercicio3/css/Index.css b/Unidad8/EjerciciosPracticas/Ejercicio3/css/Index.css[m
+[1mold mode 100644[m
+[1mnew mode 100755[m
+[1mdiff --git a/Unidad8/EjerciciosPracticas/Ejercicio3/detalle.php b/Unidad8/EjerciciosPracticas/Ejercicio3/detalle.php[m
+[1mold mode 100644[m
+[1mnew mode 100755[m
+[1mdiff --git a/Unidad8/EjerciciosPracticas/Ejercicio3/index.php b/Unidad8/EjerciciosPracticas/Ejercicio3/index.php[m
+[1mold mode 100644[m
+[1mnew mode 100755[m
+[1mdiff --git a/Unidad8/EjerciciosPracticas/Ejercicio3/meteCarro.php b/Unidad8/EjerciciosPracticas/Ejercicio3/meteCarro.php[m
+[1mold mode 100644[m
+[1mnew mode 100755[m
+[1mdiff --git a/Unidad8/EjerciciosPracticas/Ejercicio3/productos.txt b/Unidad8/EjerciciosPracticas/Ejercicio3/productos.txt[m
+[1mold mode 100644[m
+[1mnew mode 100755[m
+[1mdiff --git a/Unidad8/EjerciciosPracticas/Ejercicio3/quitaCarro.php b/Unidad8/EjerciciosPracticas/Ejercicio3/quitaCarro.php[m
+[1mold mode 100644[m
+[1mnew mode 100755[m
+[1mdiff --git a/Unidad8/EjerciciosPracticas/Ejercicio3/vaciarCesta.php b/Unidad8/EjerciciosPracticas/Ejercicio3/vaciarCesta.php[m
+[1mold mode 100644[m
+[1mnew mode 100755[m
+[1mdiff --git a/Unidad8/EjerciciosPracticas/Ejercicio9/Ejercicio9.php b/Unidad8/EjerciciosPracticas/Ejercicio9/Ejercicio9.php[m
+[1mold mode 100644[m
+[1mnew mode 100755[m
+[1mdiff --git a/Unidad9/Ejercicio1/Empleado.php b/Unidad9/Ejercicio1/Empleado.php[m
+[1mold mode 100644[m
+[1mnew mode 100755[m
+[1mdiff --git a/Unidad9/Ejercicio1/index.php b/Unidad9/Ejercicio1/index.php[m
+[1mold mode 100644[m
+[1mnew mode 100755[m
+[1mdiff --git a/Unidad9/Ejercicio2/Menu.php b/Unidad9/Ejercicio2/Menu.php[m
+[1mold mode 100644[m
+[1mnew mode 100755[m
+[1mindex 81c55e9..c5b0abd[m
+[1m--- a/Unidad9/Ejercicio2/Menu.php[m
+[1m+++ b/Unidad9/Ejercicio2/Menu.php[m
+[36m@@ -2,6 +2,15 @@[m
+ class Menu{[m
+     private $titulo;[m
+     private $enlace;[m
+[32m+[m[32m<<<<<<< HEAD[m
+[32m+[m[32m=======[m
+[32m+[m
+[32m+[m[32m    public function __construct()[m
+[32m+[m[32m    {[m
+[32m+[m[32m        $this->titulo=[];[m
+[32m+[m[32m        $this->enlace=[];[m
+[32m+[m[32m    }[m
+[32m+[m[32m>>>>>>> 80591ae (Trabajo local: cambios en Unidad9/Ejercicio2 (respaldo))[m
+ [m
+     public function __construct()[m
+     {[m
+[1mdiff --git a/Unidad9/Ejercicio2/index.php b/Unidad9/Ejercicio2/index.php[m
+[1mold mode 100644[m
+[1mnew mode 100755[m
+[1mindex 8918945..f1970fe[m
+[1m--- a/Unidad9/Ejercicio2/index.php[m
+[1m+++ b/Unidad9/Ejercicio2/index.php[m
+[36m@@ -1,5 +1,6 @@[m
+ <?php[m
+ include_once "Menu.php";[m
+[32m+[m[32m<<<<<<< HEAD[m
+ session_start();[m
+ [m
+ if(!isset($_SESSION['menu'])){[m
+[36m@@ -14,6 +15,23 @@[m [mif(isset($_POST['enviar'])){[m
+     $menu->aniadirElemento($_POST['titulo'], $_POST['enlace']);[m
+     $_SESSION['menu'] = base64_encode(serialize($menu));[m
+ }[m
+[32m+[m[32m=======[m
+[32m+[m[32m$menu = new Menu();[m
+[32m+[m[32m$menu_html = '';[m
+[32m+[m[32mif(!isset($_POST['titulo'])){[m
+[32m+[m[32m$titulo=[];[m
+[32m+[m[32m$enlace=[];[m
+[32m+[m[32m}else{[m
+[32m+[m[32m    $titulo = $_POST['titulo'];[m
+[32m+[m[32m    $enlace = $_POST['enlace'];[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m
+[32m+[m[32mfor ($i = 0; $i < count($titulo); $i++) {[m
+[32m+[m[32m    $menu->añadirElemento($titulo[$i], $enlace[$i]);[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32m>>>>>>> 80591ae (Trabajo local: cambios en Unidad9/Ejercicio2 (respaldo))[m
+ if(isset($_POST['mostrar'])){[m
+     if($_POST['tipo_menu'] == "horizontal"){[m
+         $menu_html = $menu->horizontal();[m
