@@ -27,14 +27,14 @@ if (isset($_SESSION['user']) || isset($_COOKIE['user'])) {
     if (isset($_POST['logout'])) {
         session_destroy();
         setcookie("user", "", -1);
-        header("Location: login.php");
+        header("Location: Login.php");
         exit();
     }
 
     // Save cookies
     if (isset($_POST['guardarCookies'])) {
         setcookie("user", $_SESSION['user'], time() + 3*24*3600);
-        header("Location: login.php");
+        header("Location: Login.php");
         exit();
     }
 

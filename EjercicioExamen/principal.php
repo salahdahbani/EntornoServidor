@@ -1,37 +1,33 @@
 <?php
 if(session_status() == PHP_SESSION_NONE) session_start();
-//Inicializamos la sesion
-if(!isset($_SESSION['user'])){
-    $_SESSION['user']=[]; 
+
+
+if(!isset($_SESSION['texto'])){
+    $_SESSION['texto']= [];
 }
 
-if(!isset($_SESSION['contenido'])){
-    $_SESSION['contenido'][]=[]; 
+if(isset($_SESSION['user'])){
+   $user = $_SESSION['user'];
 }
 
 if(isset($_POST['add'])){
-$titulo = $_POST['titulo'];
-$texto = $_POST['texto'];
-$fecha = date("d/m/Y");
-$hora = date("H:i:s");
-
-$_SESSION['contenido'][]=[
-        'titulo'=> $titulo,
+    $titulo = $_POST['titulo'];
+    $texto = $_POST['texto'];
+    $fecha = date("d/M/Y");
+    $hora = date("H:i:s");
+    $_SESSION['texto'][] = [
+        'titulo' => $titulo,
         'texto' => $texto,
-        'fecha'  => $fecha,
-        'hora'  => $hora
+        'fecha' => $fecha,
+        'hora' => $hora,
     ];
-    
-    }
-
+}
 if(isset($_POST['entrar'])){
 $user = $_POST['user'];
 $_SESSION['user']=[
     'user'=> $user,
 ]; 
 }
-
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -41,35 +37,42 @@ $_SESSION['user']=[
     <title>Document</title>
 </head>
 <body>
-    <h1>Panel de notas del usuario <?php echo isset($_SESSION['user']['user']) ? $_SESSION['user']['user'] : ''; ?></h1>
+     <h5>Última nota creada:
+        <?php 
+        if(isset($_SESSION['texto']['titulo'])) {
+        echo  ($_SESSION['texto'])['titulo'] ;
+         }else {
+             echo 'Ninguna'; 
+             }?></h5>
+             <br>
+    
 
-    <h5>Última nota creada:<?php echo !empty($_SESSION['contenido']) ? end($_SESSION['contenido'])['titulo'] : 'Ninguna'; ?></h5>
+<table border="1">
+<tr>
+    <td>Titulo</td>
+    <td>Fecha</td>
+    <td>Hora</td>
+</tr>
+<?php
+foreach ($_SESSION['texto'] as $i => $datos) {
+    ?>
+   <tr>
+    <td><a href="?nota=<?= $i ?>"><?= $datos['titulo'] ?></a></td>
+    <td><?= $datos['fecha'] ?></td>
+    <td><?= $datos['hora'] ?></td>
+    <?php if(isset($_GET['nota']) && $_GET['nota'] == $i){
+        echo "<td colspan='$i'><h4>" . $datos['titulo'] . "</h4><br><br>" . $datos['texto'] . "</td>";
+    }
+    ?>
+</tr>
+<?php
+}
+?>
 
+</table>
+<br>
+<br>
 
-     <table border="1">
-        <tr>
-            <td>Título</td>
-            <td>Fecha</td>
-            <td>Hora</td>
-            <td>Texto</td>
-            
-
-        </tr>
-        
-        <?php
-        foreach($_SESSION['contenido'] as $nota){   
-            echo "<tr>";
-            echo "<td>" . $nota['titulo'] . "</td>";
-            echo "<td>" . $nota['fecha'] . "</td>";
-            echo "<td>" . $nota['hora'] . "</td>";
-             echo "<td>" . $nota['texto'] . "</td>";
-            echo "</tr>";
-        }
-        ?>
-
-     </table>
-     <br>
-     <br>
       <?php 
     if(isset($_POST['logout'])){
         session_destroy();
@@ -96,6 +99,9 @@ $_SESSION['user']=[
         <br>
         <input type="submit" name="logout" value="Cerrar sesión">
     </form>
+
+    <br>
+    <a href="login.php">Volver al login</a>
 
 </body>
 </html>

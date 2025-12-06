@@ -2,15 +2,14 @@
 class Menu{
     private $titulo;
     private $enlace;
-<<<<<<< HEAD
-=======
+
 
     public function __construct()
     {
         $this->titulo=[];
         $this->enlace=[];
     }
->>>>>>> 80591ae (Trabajo local: cambios en Unidad9/Ejercicio2 (respaldo))
+>
 
     public function __construct()
     {
