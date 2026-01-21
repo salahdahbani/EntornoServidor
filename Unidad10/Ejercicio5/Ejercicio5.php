@@ -26,19 +26,21 @@ if (isset($_POST['eliminar'])) {
 if (isset($_POST['modificar'])) {
     $margen = $_POST['PrecioV'] - $_POST['PrecioC'];
     $consulta = $conexion->query("SELECT Código FROM articulos WHERE Código=" . $_POST['Código']);
-    if ($consulta->rowCount() == 0) {
-    $conexion->exec(
-        "UPDATE articulos 
-        SET Descripción='$_POST[Descripción]', PrecioC='$_POST[PrecioC]', PrecioV='$_POST[PrecioV]', Margen='$margen', Stock='$_POST[Stock]' 
-        WHERE Código=" . $_POST['Código]']
-    );
-    echo "Articulo modificado correctamente.<br>";
+    if ($consulta->rowCount() > 0) {
+        $conexion->exec(
+            "UPDATE articulos 
+            SET Descripción='$_POST[Descripción]', PrecioC='$_POST[PrecioC]', PrecioV='$_POST[PrecioV]', Margen='$margen', Stock='$_POST[Stock]' 
+            WHERE Código=" . $_POST['Código']
+        );
+        echo "Articulo modificado correctamente.<br>";
      } else {
-        echo "Ya existe un articulo con Código " . $_POST['Código'] . "<br>";
+        echo "No existe un articulo con Código " . $_POST['Código'] . "<br>";
     }
 }
+
+// ENTRADA
 if (isset($_POST['entrada'])) {
-        $conexion->exec(
+    $conexion->exec(
         "UPDATE articulos 
         SET Stock=Stock + 1
         WHERE Código=" . $_POST['Código'] 
@@ -46,17 +48,18 @@ if (isset($_POST['entrada'])) {
     echo "Entrada realizada correctamente.<br>";
 }
 
+// SALIDA
 if (isset($_POST['salida'])) {
     if ($_POST['Stock'] <= 0) {
         echo "No hay stock disponible para realizar la salida.<br>";
     } else {    
-    $conexion->exec(
-        "UPDATE articulos 
-        SET Stock=Stock - 1
-        WHERE Código=" . $_POST['Código'] 
-    );
-    echo "Salida realizada correctamente.<br>";
-}
+        $conexion->exec(
+            "UPDATE articulos 
+            SET Stock=Stock - 1
+            WHERE Código=" . $_POST['Código'] 
+        );
+        echo "Salida realizada correctamente.<br>";
+    }
 }
 
 // INSERTAR (DAR DE ALTA)
@@ -79,9 +82,33 @@ if (isset($_POST['aniadir'])) {
     }
 }
 
-// AHORA HACES EL SELECT PARA MOSTRAR LA TABLA
-$consulta = $conexion->query("SELECT Código, Descripción, PrecioC, PrecioV, Margen, Stock FROM articulos");
+// ------------------- PAGINACIÓN -------------------
+$porPagina = 5;
+
+// Página actual
+if (isset($_GET['pagina'])) {
+    $pagina = $_GET['pagina'];
+} else {
+    $pagina = 1;
+}
+if ($pagina < 1) $pagina = 1;
+
+// Contar total de artículos
+$totalArticulos = $conexion->query("SELECT COUNT(*) FROM articulos")->fetchColumn();
+
+$resto = $totalArticulos % $porPagina;
+$totalPaginas = ($totalArticulos - $resto) / $porPagina;
+if ($resto > 0) {
+    $totalPaginas = $totalPaginas + 1;
+}
+
+// Desde qué artículo empezar
+$inicio = ($pagina - 1) * $porPagina;
+
+// Traer solo los artículos de esta página
+$consulta = $conexion->query("SELECT Código, Descripción, PrecioC, PrecioV, Margen, Stock FROM articulos LIMIT $porPagina OFFSET $inicio");
 ?>
+
 <table border="1">
 <tr>
 <td><b>Código</b></td>
@@ -90,7 +117,9 @@ $consulta = $conexion->query("SELECT Código, Descripción, PrecioC, PrecioV, Ma
 <td><b>Precio Venta</b></td>
 <td><b>Margen</b></td>
 <td><b>Stock</b></td>
+<td><b>Acciones</b></td>
 </tr>
+
 <?php
 while ($articulos = $consulta->fetchObject()) {
 ?>
@@ -110,10 +139,10 @@ while ($articulos = $consulta->fetchObject()) {
     </td>
 </form>
 </tr>
-
 <?php
 }
 ?>
+
 <tr>
 <form method="post">
 <td>Código <input type="text" name="Código" required></td>
@@ -124,12 +153,34 @@ while ($articulos = $consulta->fetchObject()) {
 <td><input type="submit" value="DAR DE ALTA" name="aniadir"></td>
 </form>
 </tr>
+
+<!-- BOTONES DE PAGINACIÓN -->
+<tr>
+<td colspan="7" align="center">
+<?php
+// Primera página
+echo "<a href='?pagina=1'><input type='button' value='Primera'></a> ";
+
+// Página anterior
+$paginaAnterior = $pagina - 1;
+if ($paginaAnterior < 1) $paginaAnterior = 1;
+echo "<a href='?pagina=$paginaAnterior'><input type='button' value='Anterior'></a> ";
+
+// Página siguiente
+$paginaSiguiente = $pagina + 1;
+if ($paginaSiguiente > $totalPaginas) $paginaSiguiente = $totalPaginas;
+echo "<a href='?pagina=$paginaSiguiente'><input type='button' value='Siguiente'></a> ";
+
+// Última página
+echo "<a href='?pagina=$totalPaginas'><input type='button' value='Última'></a>";
+?>
+</td>
+</tr>
 </table>
 
 <br>
-Número de artículos: <?= $consulta->rowCount() ?>
-<?php $conexion=null; //cerramos la conexión a la BD
-?> 
+Número de artículos: <?= $totalArticulos ?>
 
+<?php $conexion=null; ?>
 </body>
 </html>

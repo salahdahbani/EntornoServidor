@@ -37,7 +37,6 @@ if (isset($_POST['modificar'])) {
     }
 }
 
-// INSERTAR (DAR DE ALTA)
 if (isset($_POST['aniadir'])) {
     $consulta = $conexion->query("SELECT DNI FROM clientes WHERE DNI=" . $_POST['DNI']);
     if ($consulta->rowCount() == 0) {
@@ -51,8 +50,27 @@ if (isset($_POST['aniadir'])) {
     }
 }
 
-// AHORA HACES EL SELECT PARA MOSTRAR LA TABLA
 $consulta = $conexion->query("SELECT DNI, Nombre, Direccion, Teléfono FROM clientes");
+$porPagina = 5;
+
+// Página actual (si no hay valor, ponemos 1)
+if (isset($_GET['pagina'])) {
+    $pagina = $_GET['pagina'];
+} else {
+    $pagina = 1;
+}
+
+// Desde qué cliente empezamos a mostrar
+$inicio = ($pagina - 1) * $porPagina;
+
+// Contar total de clientes
+$totalClientes = $conexion->query("SELECT COUNT(*) FROM clientes")->fetchColumn();
+
+// Calcular cuántas páginas necesitamos
+$totalPaginas = $totalClientes / $porPagina;
+
+// Traer solo los clientes de esta página
+$consulta = $conexion->query("SELECT * FROM clientes LIMIT $porPagina OFFSET $inicio");
 ?>
 <table border="1">
 <tr>
@@ -93,6 +111,29 @@ while ($cliente = $consulta->fetchObject()) {
 
 <br>
 Número de clientes: <?= $consulta->rowCount() ?>
+<?php
+// Enlace a la página anterior
+if ($pagina > 1) {
+    $anterior = $pagina - 1;
+    echo "<a href='?pagina=$anterior'>Anterior</a> ";
+}
+
+// Mostrar los números de página
+for ($i = 1; $i <= $totalPaginas; $i++) {
+    if ($i == $pagina) {
+        echo "<b>$i</b> "; // Página actual en negrita
+    } else {
+        echo "<a href='?pagina=$i'>$i</a> ";
+    }
+}
+
+// Enlace a la página siguiente
+if ($pagina < $totalPaginas) {
+    $siguiente = $pagina + 1;
+    echo "<a href='?pagina=$siguiente'>Siguiente</a>";
+}
+?>
+<p>Total de clientes: <?= $totalClientes ?></p>
 <?php $conexion=null; //cerramos la conexión a la BD
 ?> 
 
