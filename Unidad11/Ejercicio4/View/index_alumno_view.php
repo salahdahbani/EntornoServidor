@@ -13,7 +13,7 @@
         <td>Nombre</td>
         <td>Apellido</td>
         <td>Curso</td>
-        <td><a href="../Controller/grabaAsignatura.php">Asignatura</a></td>
+        
     </tr>
 <?php
 foreach($data['alumno'] as $alumno) {
@@ -33,5 +33,7 @@ foreach($data['alumno'] as $alumno) {
 <br>
 <hr>
 <a href="../Controller/nuevoAlumno.php">Nuevo alumno</a>
+<br>
+<a href="../Controller/index_asignatura.php">Asignatura</a>
 </body>
 </html>

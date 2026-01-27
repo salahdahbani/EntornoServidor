@@ -3,7 +3,7 @@ require_once 'EscuelaBD.php';
 class Asignatura_Alumno {
 private $matricula;
 private $codigo_asignatura;
-function __construct($matricula=0, $codigo_asignatura=0) {
+function __construct($matricula="", $codigo_asignatura=0) {
 $this->matricula = $matricula;
 $this->codigo_asignatura = $codigo_asignatura;
 

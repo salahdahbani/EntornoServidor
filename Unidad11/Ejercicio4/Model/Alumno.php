@@ -5,7 +5,7 @@ private $matricula;
 private $nombre;
 private $apellido;
 private $curso;
-function __construct($matricula=0, $nombre="", $apellido="", $curso="") {
+function __construct($matricula="", $nombre="", $apellido="", $curso="") {
 $this->matricula = $matricula;
 $this->nombre = $nombre;
 $this->apellido = $apellido;
@@ -25,8 +25,13 @@ return $this->curso;
 }
 public function insert() {
 $conexion = EscuelaBD::connectDB();
+$consulta = $conexion->query("SELECT matricula FROM alumno WHERE matricula='$this->matricula'");
+if ($consulta->rowCount() == 0) {
 $insercion = "INSERT INTO alumno (matricula, nombre, apellido, curso) VALUES ('$this->matricula','$this->nombre','$this->apellido','$this->curso')";
 $conexion->exec($insercion);
+}else{
+    echo "Ya existe un alumno con matrícula " . $this->matricula . "<br>";
+}
 $conexion=null;
 }
 public function delete() {
@@ -54,7 +59,7 @@ return $productos;
 }
 public static function getAlumnoById($matricula) {
 $conexion = EscuelaBD::connectDB();
-$seleccion = "SELECT matricula, nombre, apellido, curso FROM alumno WHERE matricula=$matricula";
+$seleccion = "SELECT matricula, nombre, apellido, curso FROM alumno WHERE matricula='$matricula'";
 $consulta = $conexion->query($seleccion);
 if ($consulta->rowCount()>0) {
 $registro = $consulta->fetchObject();

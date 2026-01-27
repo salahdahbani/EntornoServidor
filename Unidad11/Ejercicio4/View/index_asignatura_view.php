@@ -7,10 +7,10 @@
 <body>
 <h1>Blog de alumnos</h1>
 <hr>
+
 <table border="1" color="black">
     <tr>
         <td>Nombre</td>
-        <td><a href="../Controller/grabaAlumno.php">Alumnos</a></td>
     </tr>
 <?php
 foreach($data['asignatura'] as $asignatura) {
@@ -26,5 +26,8 @@ foreach($data['asignatura'] as $asignatura) {
 <br>
 <hr>
 <a href="../Controller/nuevaAsignatura.php">Nueva asignatura</a>
+<br>
+
+<a href="../Controller/index.php">Alumnos</a>
 </body>
 </html>

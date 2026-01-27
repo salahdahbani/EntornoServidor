@@ -17,7 +17,7 @@ return $this->nombre;
 
 public function insert() {
 $conexion = EscuelaBD::connectDB();
-$insercion = "INSERT INTO asignatura (codigo, nombre) VALUES ('$this->codigo','$this->nombre')";
+$insercion = "INSERT INTO asignatura (nombre) VALUES ('$this->nombre')";
 $conexion->exec($insercion);
 $conexion=null;
 }
