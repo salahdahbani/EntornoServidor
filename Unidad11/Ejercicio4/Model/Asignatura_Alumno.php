@@ -1,9 +1,11 @@
 <?php
 require_once 'EscuelaBD.php';
+require_once 'Alumno.php';
+require_once 'Asignatura.php';
 class Asignatura_Alumno {
 private $matricula;
 private $codigo_asignatura;
-function __construct($matricula="", $codigo_asignatura=0) {
+function __construct($matricula="", $codigo_asignatura="") {
 $this->matricula = $matricula;
 $this->codigo_asignatura = $codigo_asignatura;
 
@@ -14,10 +16,9 @@ return $this->matricula;
 public function getCodigoAsignatura() {
 return $this->codigo_asignatura;
 }
-
 public function insert() {
 $conexion = EscuelaBD::connectDB();
-$insercion = "INSERT INTO asignatura_alumno (matricula, codigo_asignatura) VALUES ('$this->matricula','$this->codigo_asignatura')";
+$insercion = "INSERT INTO asignatura_alumno VALUES ('$this->matricula', '$this->codigo_asignatura')";
 $conexion->exec($insercion);
 $conexion=null;
 }
@@ -26,16 +27,10 @@ $conexion = EscuelaBD::connectDB();
 $borrado = "DELETE FROM asignatura_alumno WHERE matricula='$this->matricula' AND codigo_asignatura='$this->codigo_asignatura'";
 $conexion->exec($borrado);
 $conexion=null;
-}
-public function update() {
+}   
+public static function getAsignaturas() {
 $conexion = EscuelaBD::connectDB();
-$actualiza = "UPDATE asignatura_alumno SET matricula='$this->matricula', codigo_asignatura='$this->codigo_asignatura' WHERE matricula='$this->matricula' AND codigo_asignatura='$this->codigo_asignatura'";
-$conexion->exec($actualiza);
-$conexion=null;
-}
-public static function getAsignatura_alumno() {
-$conexion = EscuelaBD::connectDB();
-$seleccion = "SELECT matricula, codigo_asignatura FROM asignatura_alumno";
+$seleccion = "SELECT * FROM asignatura_alumno";
 $consulta = $conexion->query($seleccion);
 $productos = [];
 while ($registro = $consulta->fetchObject()) {
@@ -44,20 +39,28 @@ $productos[] = new Asignatura_Alumno($registro->matricula, $registro->codigo_asi
 $conexion=null;
 return $productos;
 }
-public static function getAsignatura_alumnoById($matricula, $codigo_asignatura) {
+public static function getAsignaturaLibres($matricula) {
 $conexion = EscuelaBD::connectDB();
-$seleccion = "SELECT matricula, codigo_asignatura FROM asignatura_alumno WHERE matricula=$matricula AND codigo_asignatura=$codigo_asignatura";
+$seleccion = "SELECT * FROM asignatura WHERE codigo NOT IN (SELECT codigo_asignatura FROM asignatura_alumno WHERE matricula='$matricula')";
 $consulta = $conexion->query($seleccion);
-if ($consulta->rowCount()>0) {
-$registro = $consulta->fetchObject();
-$producto = new Asignatura_Alumno($registro->matricula, $registro->codigo_asignatura);
+$asignaturasLibres = [];   
+while ($registro = $consulta->fetchObject()) {
+$asignaturasLibres[] = new Asignatura_Alumno($matricula, $registro->codigo);
+ }
 $conexion=null;
-return $producto;
-}else{
-$conexion=null;
-return false;
-}
-}
+return $asignaturasLibres;
 }
 
+public static function getAlumnoMatriculados($codigo_asignatura) {
+$conexion = EscuelaBD::connectDB();
+$seleccion = "SELECT * FROM alumno WHERE matricula IN (SELECT matricula FROM asignatura_alumno WHERE codigo_asignatura='$codigo_asignatura')";
+$consulta = $conexion->query($seleccion);
+$productos = [];
+while ($registro = $consulta->fetchObject()) {
+$productos[] = new Alumno($registro->matricula, $registro->nombre, $registro->apellido, $registro->curso);
+}
+$conexion=null;
+return $productos;
+}
+}
 ?>

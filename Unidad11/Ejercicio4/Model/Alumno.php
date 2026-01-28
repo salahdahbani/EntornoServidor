@@ -1,5 +1,7 @@
 <?php
 require_once 'EscuelaBD.php';
+require_once 'Asignatura.php';
+require_once 'Asignatura_Alumno.php';
 class Alumno {
 private $matricula;
 private $nombre;
@@ -39,6 +41,17 @@ $conexion = EscuelaBD::connectDB();
 $borrado = "DELETE FROM alumno WHERE matricula='$this->matricula'";
 $conexion->exec($borrado);
 $conexion=null;
+}
+public function getAsignaturaMat() {
+$conexion = EscuelaBD::connectDB();
+$seleccion = "SELECT * FROM asignatura JOIN asignatura_alumno ON asignatura.codigo = asignatura_alumno.codigo_asignatura WHERE asignatura_alumno.matricula='$this->matricula'";
+$consulta = $conexion->query($seleccion);
+$asignaturas = [];
+while ($registro = $consulta->fetchObject()) {
+$asignaturas[] = new Asignatura($registro->codigo, $registro->nombre);
+}
+$conexion=null;
+return $asignaturas;
 }
 public function update() {
 $conexion = EscuelaBD::connectDB();

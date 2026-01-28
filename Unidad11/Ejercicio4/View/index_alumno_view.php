@@ -23,6 +23,7 @@ foreach($data['alumno'] as $alumno) {
         <td><?=$alumno->getNombre()?></td>
         <td><?=$alumno->getApellido()?></td>
         <td><?=$alumno->getCurso()?></td>
+        <td><a href="../Controller/verAsignaturas.php?matricula=<?=$alumno->getMatricula()?>">Ver asignaturas</a></td>
         <td><a href="../Controller/actualizaAlumno.php?matricula=<?=$alumno->getMatricula()?>">Actualizar</a>
         <a href="../Controller/borraAlumno.php?matricula=<?=$alumno->getMatricula()?>">Borrar</a></td>
     </tr>

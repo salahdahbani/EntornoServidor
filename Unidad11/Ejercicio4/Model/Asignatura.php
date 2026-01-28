@@ -46,7 +46,7 @@ return $productos;
 }
 public static function getAsignaturaById($codigo) {
 $conexion = EscuelaBD::connectDB();
-$seleccion = "SELECT codigo, nombre FROM asignatura WHERE codigo=$codigo";
+$seleccion = "SELECT codigo, nombre FROM asignatura WHERE codigo='$codigo'";
 $consulta = $conexion->query($seleccion);
 if ($consulta->rowCount()>0) {
 $registro = $consulta->fetchObject();

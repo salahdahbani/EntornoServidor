@@ -17,6 +17,7 @@ foreach($data['asignatura'] as $asignatura) {
 ?>
     <tr>
         <td><?=$asignatura->getNombre()?></td>
+        <td><a href="../Controller/verAlumnos.php?codigo_asignatura=<?=$asignatura->getCodigo()?>">Ver alumnos</a></td>
         <td><a href="../Controller/borraAsignatura.php?codigo=<?=$asignatura->getCodigo()?>">Borrar</a></td>
     </tr>
 <?php
