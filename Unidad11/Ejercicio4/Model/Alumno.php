@@ -27,13 +27,8 @@ return $this->curso;
 }
 public function insert() {
 $conexion = EscuelaBD::connectDB();
-$consulta = $conexion->query("SELECT matricula FROM alumno WHERE matricula='$this->matricula'");
-if ($consulta->rowCount() == 0) {
 $insercion = "INSERT INTO alumno (matricula, nombre, apellido, curso) VALUES ('$this->matricula','$this->nombre','$this->apellido','$this->curso')";
 $conexion->exec($insercion);
-}else{
-    echo "Ya existe un alumno con matrícula " . $this->matricula . "<br>";
-}
 $conexion=null;
 }
 public function delete() {
