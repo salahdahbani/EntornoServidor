@@ -5,21 +5,32 @@ if (!isset($_SESSION['carrito'])) {
     $_SESSION['carrito'] = [];
 }
 
-$codigo = $_POST['codigo'] ?? null;
-
+if (isset($_POST['codigo'])) {
+    $codigo = $_POST['codigo'];
+} else {
+    $codigo = null;
+}
 if ($codigo !== null) {
 
     if (!isset($_SESSION['carrito'][$codigo])) {
         $_SESSION['carrito'][$codigo] = 0;
     }
-
     if (isset($_POST['mas'])) {
         $_SESSION['carrito'][$codigo]++;
     }
-
     if (isset($_POST['menos']) && $_SESSION['carrito'][$codigo] > 0) {
-        $_SESSION['carrito'][$codigo]--;
+    if (!isset($_SESSION['carrito'][$codigo])) {
+        $_SESSION['carrito'][$codigo] = 0;
     }
+    $productoActual = Producto::getProductoById($codigo);
+    if ($productoActual->getStock() > 0) {
+        $_SESSION['carrito'][$codigo]--;
+        $nuevoStock = $productoActual->getStock() + 1;
+        $productoActual->setStock($nuevoStock);
+        $productoActual->update();
+}
+    }
+$data['productos'] = Producto::getProductos();
 }
 ?>
 
