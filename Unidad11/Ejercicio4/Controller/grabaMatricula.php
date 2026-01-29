@@ -14,4 +14,4 @@ if(isset($_GET['matricula']) && isset($_GET['codigo'])){
     $relacion->insert();
 }
 // Redirigimos de vuelta a la ficha del alumno para ver los cambios
-    header("Location: ../Controller/verAsignaturas.php?matricula=<?php echo $matricula; ?>&nombre=<?php echo $nombreAsignatura; ?>");
+    header("Location: ../Controller/nuevaMatricula.php?matricula=" . $matricula);
