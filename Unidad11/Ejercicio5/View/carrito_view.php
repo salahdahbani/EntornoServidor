@@ -1,34 +1,3 @@
-<?php
-require_once '../Model/Cesta.php';
-require_once '../Model/Producto.php';
-
-// 1. Identificar al usuario (debe estar en la sesión tras el login)
-if (!isset($_SESSION['id_usuario'])) {
-    // Si no hay sesión, podrías redirigir al login o usar un ID de prueba para testear
-    // header("Location: login.php"); exit;
-    $id_actual = 1; // ID de prueba
-} else {
-    $id_actual = $_SESSION['id_usuario'];
-}
-
-// 2. Lógica de persistencia (opcional: si quieres que los botones + y - graben en BD)
-if (isset($_POST['codigo'])) {
-    $codigo = $_POST['codigo'];
-    if (isset($_POST['mas'])) {
-        $nuevaRelacion = new Cesta($id_actual, $codigo);
-        $nuevaRelacion->insert();
-    }
-    if (isset($_POST['menos'])) {
-        $itemABorrar = new Cesta($id_actual, $codigo);
-        $itemABorrar->delete(); // Borra una unidad
-    }
-}
-
-// 3. Obtener los datos REALES del carrito de este usuario desde la BD
-$data['cesta'] = Cesta::getCestaByCliente($id_actual);
-$data['productos_info'] = Producto::getProductos();
-?>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -40,7 +9,7 @@ $data['productos_info'] = Producto::getProductos();
     <h3>Usuario <?= $data['usuario']->getNombre() ?></h3>
     <hr>
 
-    <?php if (count($data['cesta']) > 0): ?>
+    <?php if (count($data['cesta']) > 0) { ?>
         <table border="1">
             <tr>
                 <th>Producto</th>
@@ -104,9 +73,9 @@ $data['productos_info'] = Producto::getProductos();
                 <td colspan="2"><strong><?= number_format($total, 2) ?> €</strong></td>
             </tr>
         </table>
-    <?php else: ?>
+    <?php }else { ?>
         <p>Tu carrito está vacío. ¡Añade algún producto!</p>
-    <?php endif; ?>
+    <?php } ?>
 
     <br>
     <hr>
