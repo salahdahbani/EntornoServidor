@@ -5,7 +5,7 @@
 <title>Listado de alumnos</title>
 </head>
 <body>
-<h1>Blog de alumnos</h1>
+<h1>Blog de asignaturas</h1>
 <hr>
 
 <table border="1" color="black">

@@ -1,87 +1,115 @@
 <?php
-session_start();
+require_once '../Model/Cesta.php';
+require_once '../Model/Producto.php';
 
-if (!isset($_SESSION['carrito'])) {
-    $_SESSION['carrito'] = [];
+// 1. Identificar al usuario (debe estar en la sesión tras el login)
+if (!isset($_SESSION['id_usuario'])) {
+    // Si no hay sesión, podrías redirigir al login o usar un ID de prueba para testear
+    // header("Location: login.php"); exit;
+    $id_actual = 1; // ID de prueba
+} else {
+    $id_actual = $_SESSION['id_usuario'];
 }
 
+// 2. Lógica de persistencia (opcional: si quieres que los botones + y - graben en BD)
 if (isset($_POST['codigo'])) {
     $codigo = $_POST['codigo'];
-} else {
-    $codigo = null;
-}
-if ($codigo !== null) {
-
-    if (!isset($_SESSION['carrito'][$codigo])) {
-        $_SESSION['carrito'][$codigo] = 0;
-    }
     if (isset($_POST['mas'])) {
-        $_SESSION['carrito'][$codigo]++;
+        $nuevaRelacion = new Cesta($id_actual, $codigo);
+        $nuevaRelacion->insert();
     }
-    if (isset($_POST['menos']) && $_SESSION['carrito'][$codigo] > 0) {
-    if (!isset($_SESSION['carrito'][$codigo])) {
-        $_SESSION['carrito'][$codigo] = 0;
-    }
-    $productoActual = Producto::getProductoById($codigo);
-    if ($productoActual->getStock() > 0) {
-        $_SESSION['carrito'][$codigo]--;
-        $nuevoStock = $productoActual->getStock() + 1;
-        $productoActual->setStock($nuevoStock);
-        $productoActual->update();
-}
+    if (isset($_POST['menos'])) {
+        $itemABorrar = new Cesta($id_actual, $codigo);
+        $itemABorrar->delete(); // Borra una unidad
     }
 }
-$data['productos'] = Producto::getProductos();
 
+// 3. Obtener los datos REALES del carrito de este usuario desde la BD
+$data['cesta'] = Cesta::getCestaByCliente($id_actual);
+$data['productos_info'] = Producto::getProductos();
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Carrito</title>
+    <meta charset="UTF-8">
+    <title>Carrito por Usuario</title>
 </head>
 <body>
-<h1>Carrito</h1>
-<hr>
-<table border="1" color="black">
-    <tr>
-        <td>Nombre</td>
-        <td>Imagen</td>
-        <td>Precio</td>
-        <td>Unidades</td>
-        <td>Total</td>
-    </tr>
-<?php foreach ($data['producto'] as $producto){
+    <h1>Mi Carrito</h1>
+    <h3>Usuario <?= $data['usuario']->getNombre() ?></h3>
+    <hr>
 
-    $codigo = $producto->getCodigo();
-    $unidades = $_SESSION['carrito'][$codigo] ?? 0;
-    $total = $producto->getPrecio() * $unidades;
-?>
-<tr>
-    <td><?= $producto->getNombre() ?></td>
+    <?php if (count($data['cesta']) > 0): ?>
+        <table border="1">
+            <tr>
+                <th>Producto</th>
+                <th>Imagen</th>
+                <th>Cantidad</th>
+                <th>Precio</th>
+                <th>Acción</th>
+            </tr>
+            <?php 
+            $total = 0;
+            foreach ($data['cesta'] as $itemCesta){
+                // Buscamos los detalles (nombre, foto) del producto
+                $productoDetalle = null;
+                foreach ($data['productos_info'] as $p) {
+                    if ($p->getCodigo() == $itemCesta->getCod_producto()) {
+                        $productoDetalle = $p;
+                    }
+                }
 
-    <td>
-        <img src="../Images/<?= $producto->getImagen() ?>" width="100">
-    </td>
+                if ($productoDetalle){
+                    $total += $productoDetalle->getPrecio();
+            ?>
+                <tr>
+                    <td><?= $productoDetalle->getNombre() ?></td>
+                    <td>
+                        <img src="../View/images/<?= $productoDetalle->getImagen() ?>" width="80">
+                    </td>
+                    <td><?php
+                     if (isset($_POST['codigo']) && $_POST['codigo'] == $productoDetalle->getCodigo()) {
+                            // Si se acaba de añadir o quitar, recalcular la cantidad
+                            $cantidad = 0;
+                            foreach (Cesta::getCestaByCliente($id_actual) as $ic) {
+                                if ($ic->getCod_producto() == $productoDetalle->getCodigo()) {
+                                    $cantidad++;
+                                }
+                            }
+                            echo $cantidad;
+                        } else {
+                            // Cantidad inicial
+                            $cantidad = 0;
+                            foreach (Cesta::getCestaByCliente($id_actual) as $ic) {
+                                if ($ic->getCod_producto() == $productoDetalle->getCodigo()) {
+                                    $cantidad++;
+                                }
+                            }
+                            echo $cantidad;
+                        }
+                     ?></td>
+                    <td><?= $productoDetalle->getPrecio() ?> €</td>
+                    <td>
+                        <a href="../Controller/borrar_item.php?id_c=<?= $id_actual ?>&cod_p=<?= $productoDetalle->getCodigo() ?>">
+                            Eliminar del carrito
+                        </a>
+                    </td>
+                </tr>
+            <?php }
+            }
+             ?>
+            <tr>
+                <td colspan="2"><strong>TOTAL DE LA COMPRA</strong></td>
+                <td colspan="2"><strong><?= number_format($total, 2) ?> €</strong></td>
+            </tr>
+        </table>
+    <?php else: ?>
+        <p>Tu carrito está vacío. ¡Añade algún producto!</p>
+    <?php endif; ?>
 
-    <td><?= $producto->getPrecio() ?> €</td>
-
-    <td>
-        <form method="post">
-            <input type="hidden" name="codigo" value="<?= $codigo ?>">
-            <button name="menos">-</button>
-            <?= $unidades ?>
-            <button name="mas">+</button>
-        </form>
-    </td>
-
-    <td><?= $total ?> €</td>
-</tr>
-<?php } ?>
-</table>
-<br>
-<hr>
-<a href="../Controller/index_usuario.php">Volver</a>
+    <br>
+    <hr>
+    <a href="../Controller/index_cliente.php">Continuar comprando</a>
 </body>
 </html>

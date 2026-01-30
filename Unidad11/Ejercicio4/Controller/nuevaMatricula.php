@@ -10,9 +10,8 @@ $data['asignatura_alumno'] = Asignatura_Alumno::getAsignaturas();
 if (isset($_REQUEST['matricula'])) {
     $matricula = $_REQUEST['matricula'];
 
-    if ($matricula != '') { // comprobación simple sin empty
+    if ($matricula != '') { 
         $alumno = Alumno::getAlumnoById($matricula);
-
         if ($alumno) {
             $data['unAlumno'] = $alumno;
             $data['susAsignaturas'] = $alumno->getAsignaturaMat();
@@ -23,17 +22,14 @@ if (isset($_REQUEST['matricula'])) {
 // Si se envía código de asignatura
 if (isset($_REQUEST['codigo_asignatura'])) {
     $codigo_asignatura = $_REQUEST['codigo_asignatura'];
-
     if ($codigo_asignatura != '') { // comprobación simple
         // Buscar la asignatura en el array de asignaturas
         $asignatura = null;
         foreach ($data['asignaturas'] as $a) {
             if ($a->getCodigo() == $codigo_asignatura) {
                 $asignatura = $a;
-                break;
             }
         }
-
         if ($asignatura) {
             $data['alumnos_matriculados'] = Asignatura_Alumno::getAlumnoMatriculados($codigo_asignatura);
         }

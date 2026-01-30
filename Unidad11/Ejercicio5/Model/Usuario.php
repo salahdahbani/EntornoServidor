@@ -42,6 +42,17 @@ $actualiza = "UPDATE usuarios SET nombre='$this->nombre', pass='$this->pass', ro
 $conexion->exec($actualiza);
 $conexion=null;
 }
+public function getProductoComp() {
+$conexion = EscuelaBD::connectDB();
+$seleccion = "SELECT * FROM carrito JOIN cesta ON carrito.codigo = cesta.cod_producto WHERE cesta.id_cliente='$this->id'";
+$consulta = $conexion->query($seleccion);
+$asignaturas = [];
+while ($registro = $consulta->fetchObject()) {
+$asignaturas[] = new Producto($registro->cod_producto, $registro->nombre,$registro->imagen, $registro->precio);
+}
+$conexion=null;
+return $asignaturas;
+}
 public static function getUsuarios() {
 $conexion = CarritoBD::connectDB();
 $seleccion = "SELECT id, nombre, pass, rol FROM usuarios";

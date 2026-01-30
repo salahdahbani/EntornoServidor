@@ -4,11 +4,9 @@ require_once '../Model/Asignatura.php';
 
 $data['unAlumno'] = null;
 $data['susAsignaturas'] = []; // Inicializamos como array vacío para evitar errores en la vista
-
 if (isset($_GET['matricula'])) {
     $matricula = $_GET['matricula'];
-    $alumno = Alumno::getAlumnoById($matricula);
-    
+    $alumno = Alumno::getAlumnoById($matricula);  
     if ($alumno) {
         $data['unAlumno'] = $alumno;
         // Obtenemos las asignaturas en las que ya está inscrito

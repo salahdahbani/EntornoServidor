@@ -1,31 +1,3 @@
-<?php
-session_start();
-
-if (!isset($_SESSION['carrito'])) {
-    $_SESSION['carrito'] = [];
-}
-if(isset($_POST['codigo'])) {
-    $codigoComprar = $_POST['codigo'];
-} else {
-    $codigoComprar = null;
-}
-if (isset($_POST['comprar']) && $codigoComprar !== null) {
-    if (!isset($_SESSION['carrito'][$codigoComprar])) {
-        $_SESSION['carrito'][$codigoComprar] = 0;
-    }
-    
-    $productoActual = Producto::getProductoById($codigoComprar);
-    if ($productoActual->getStock() > 0) {
-        $_SESSION['carrito'][$codigoComprar]++;
-        $nuevoStock = $productoActual->getStock() - 1;
-        $productoActual->setStock($nuevoStock);
-        $productoActual->update(); 
-    } else {
-        echo "<script>alert('No hay stock disponible para este producto.');</script>";
-    }
-}
-$data['productos'] = Producto::getProductos(); 
-?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -33,7 +5,7 @@ $data['productos'] = Producto::getProductos();
 <title>Listado de productos</title>
 </head>
 <body>
-<h1>Blog de productos</h1>
+<h1>Blog de Admin</h1>
 <hr>
 <table border="1" color="black">
     <tr>
@@ -44,7 +16,7 @@ $data['productos'] = Producto::getProductos();
         <td>Imagen</td>
     </tr>
 <?php
-foreach($data['producto'] as $producto) {
+foreach($data['productos'] as $producto) {
 ?>
     <tr>
         <td><?=$producto->getCodigo()?></td>
@@ -63,6 +35,6 @@ foreach($data['producto'] as $producto) {
 <hr>
 <a href="../Controller/nuevoProducto.php">Nuevo producto</a>
 <br>
-<a href="../Controller/index_usuario.php">Volver al inicio</a>
+<a href="../Controller/logout.php">Volver al inicio</a>
 </body>
 </html>
