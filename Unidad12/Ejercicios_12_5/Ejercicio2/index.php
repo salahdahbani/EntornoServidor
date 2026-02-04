@@ -25,6 +25,7 @@
                 <option value="27">Terror</option>
                 <option value="878">Ciencia Ficción</option>
             </select>
+            <input type="number" name="puntuacion" placeholder="Mínima Puntuación" min="0" max="10" step="0.1">
 
             <input type="submit" name="buscar" value="BUSCAR" class="btn-enviar">
         </form>
