@@ -40,11 +40,16 @@ if (isset($_REQUEST['buscar'])) {
     $anio = $_REQUEST['anio'];
     $genero = $_REQUEST['genero'];
     $puntuacion = $_REQUEST['puntuacion'];
+    if(isset($_REQUEST['contenido_18'])) {
+        $contenido_18 = true;
+    } else {
+        $contenido_18 = false;
+    }
 
     if (!empty($busqueda)) {
-        $url = "https://api.themoviedb.org/3/search/movie?api_key=" . $apiKey . "&language=es&query=" . $busqueda . "&primary_release_year=" . $anio . "&with_genres=" . $genero . "&vote_average.gte=" . $puntuacion;
+        $url = "https://api.themoviedb.org/3/search/movie?api_key=" . $apiKey . "&language=es&query=" . $busqueda . "&primary_release_year=" . $anio . "&with_genres=" . $genero . "&vote_average.gte=" . $puntuacion . "&include_adult=" . ($contenido_18 ? "true" : "false");
     } else {
-        $url = "https://api.themoviedb.org/3/discover/movie?api_key=" . $apiKey . "&language=es&with_genres=" . $genero . "&primary_release_year=" . $anio . "&sort_by=popularity.desc&vote_average.gte=" . $puntuacion;
+        $url = "https://api.themoviedb.org/3/discover/movie?api_key=" . $apiKey . "&language=es&with_genres=" . $genero . "&primary_release_year=" . $anio . "&sort_by=popularity.desc&vote_average.gte=" . $puntuacion . "&include_adult=" . ($contenido_18 ? "true" : "false");
     }
 
     mostrarPeliculas($url);

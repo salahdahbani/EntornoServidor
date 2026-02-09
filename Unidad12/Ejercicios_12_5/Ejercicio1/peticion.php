@@ -1,6 +1,6 @@
 <?php
 if (isset($_REQUEST['consultar'])) {
-    $apiKey = "5b9efae574bc202f3da4d89a39b1d3d2"; // Sustituye esto por tu clave real
+    $apiKey = "5b9efae574bc202f3da4d89a39b1d3d2";
     $ciudad = urlencode($_REQUEST['ciudad']);
     
     // Construimos la URL de la API externa

@@ -1,5 +1,5 @@
 <?php
-$url="http://localhost/Curso%20Actual/Ejer-LIBRO/Unidad%2012/EjemploLibro_Restfull/Servidor/consultaProductos.php";
+$url="http://localhost/EntornoServidor/Unidad12/Ejercicios_12_7/Ejercicio3/Servidor/consultaProductos.php";
 if (isset($_REQUEST['filtraPrecio'])) {
     $parametros = '?min=' . $_REQUEST['min'] . '&max=' . $_REQUEST['max'];
     mostrarDatos($url, $parametros);

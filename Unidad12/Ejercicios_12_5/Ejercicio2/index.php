@@ -26,6 +26,7 @@
                 <option value="878">Ciencia Ficción</option>
             </select>
             <input type="number" name="puntuacion" placeholder="Mínima Puntuación" min="0" max="10" step="0.1">
+            <input type="checkbox" name="contenido_18" value="1"> Contenido +18
 
             <input type="submit" name="buscar" value="BUSCAR" class="btn-enviar">
         </form>

@@ -1,5 +1,5 @@
 <?php
-require_once 'TiendaDB.php';
+require_once 'CarritoDB.php';
 class Producto {
     private $codigo;
     private $nombre;
@@ -16,23 +16,23 @@ class Producto {
     }
 
     public function insert() {
-        $conexion = TiendaDB::connectDB();
-        $insercion = "INSERT INTO productos (nombre, precio, stock) VALUES (\"".$this->nombre."\", \"".$this->precio."\", \"".$this->stock."\")";
+        $conexion = CarritoBD::connectDB();
+        $insercion = "INSERT INTO carrito (nombre, precio, stock) VALUES (\"".$this->nombre."\", \"".$this->precio."\", \"".$this->stock."\")";
         $conexion->exec($insercion);
     }
     public function delete() {
-        $conexion = TiendaDB::connectDB();
-        $borrado = "DELETE FROM productos WHERE codigo=\"".$this->codigo."\"";
+        $conexion = CarritoBD::connectDB();
+        $borrado = "DELETE FROM carrito WHERE codigo=\"".$this->codigo."\"";
         $conexion->exec($borrado);
     }
     public function update() {
-        $conexion = TiendaDB::connectDB();
-        $actualiza = "UPDATE productos SET nombre=\"".$this->nombre."\", precio=\"".$this->precio."\", imagen=\"".$this->imagen."\" WHERE codigo=\"".$this->codigo."\"";
+        $conexion = CarritoBD::connectDB();
+        $actualiza = "UPDATE carrito SET nombre=\"".$this->nombre."\", precio=\"".$this->precio."\", imagen=\"".$this->imagen."\" WHERE codigo=\"".$this->codigo."\"";
         $conexion->exec($actualiza);
     }
     public static function getProductos() {
-        $conexion = TiendaDB::connectDB();
-        $seleccion = "SELECT codigo, nombre, precio, imagen, stock FROM productos ORDER BY nombre";
+        $conexion = CarritoBD::connectDB();
+        $seleccion = "SELECT codigo, nombre, precio, imagen, stock FROM carrito ORDER BY nombre";
         $consulta = $conexion->query($seleccion);
         $productos = [];
         while ($registro = $consulta->fetchObject()) {
@@ -42,8 +42,8 @@ class Producto {
     }
 
     public static function getProductosFiltroPrecio($min, $max) {
-        $conexion = TiendaDB::connectDB();
-        $seleccion = "SELECT codigo, nombre, precio, imagen, stock FROM productos WHERE precio >= ".$min." AND precio <=".$max;
+        $conexion = CarritoBD::connectDB();
+        $seleccion = "SELECT codigo, nombre, precio, imagen, stock FROM carrito WHERE precio >= ".$min." AND precio <=".$max;
         $consulta = $conexion->query($seleccion);
         $productos = [];
         while ($registro = $consulta->fetchObject()) {
@@ -53,8 +53,8 @@ class Producto {
     }
 
     public static function getProductosFiltroNombre($cad) {
-        $conexion = TiendaDB::connectDB();
-        $seleccion = "SELECT codigo, nombre, precio, imagen, stock FROM productos WHERE nombre LIKE '%$cad%'";
+        $conexion = CarritoBD::connectDB();
+        $seleccion = "SELECT codigo, nombre, precio, imagen, stock FROM carrito WHERE nombre LIKE '%$cad%'";
         $consulta = $conexion->query($seleccion);
         $productos = [];
         while ($registro = $consulta->fetchObject()) {
@@ -63,16 +63,16 @@ class Producto {
         return $productos;
     }
     public static function getProductoById($id) {
-        $conexion = TiendaDB::connectDB();
-        $seleccion = "SELECT codigo, nombre, precio, imagen, stock FROM productos WHERE codigo=\"".$id."\"";
+        $conexion = CarritoBD::connectDB();
+        $seleccion = "SELECT codigo, nombre, precio, imagen, stock FROM carrito WHERE codigo=\"".$id."\"";
         $consulta = $conexion->query($seleccion);
         $registro = $consulta->fetchObject();
         $producto = new Producto($registro->codigo, $registro->nombre, $registro->precio, $registro->imagen, $registro->stock);
         return $producto;
     }
     public static function getProductoByNombre($nombre) {
-        $conexion = TiendaDB::connectDB();
-        $seleccion = "SELECT codigo, nombre, precio, imagen, stock FROM productos WHERE nombre LIKE \"".$nombre."\"";
+        $conexion = CarritoBD::connectDB();
+        $seleccion = "SELECT codigo, nombre, precio, imagen, stock FROM carrito WHERE nombre LIKE \"".$nombre."\"";
         $consulta = $conexion->query($seleccion);
         if ($consulta->rowCount() > 0) {
             $registro = $consulta->fetchObject();
@@ -83,17 +83,17 @@ class Producto {
         }
     }
     public function añade($cant) {
-        $conexion = TiendaDB::connectDB();
+        $conexion = CarritoBD::connectDB();
         $cant+=$this->stock;
-        $actualiza = "UPDATE productos SET stock='$cant' WHERE codigo='$this->codigo'";
+        $actualiza = "UPDATE carrito SET stock='$cant' WHERE codigo='$this->codigo'";
         $conexion->exec($actualiza);
     }
     public function vender($cant){
-        $conexion = TiendaDB::connectDB();
+        $conexion = CarritoBD::connectDB();
         $stock=Producto::getProductoById($this->codigo)->getStock();
         $diferencia=$stock-$cant;
         if ($diferencia>=0) {
-            $actualiza = "UPDATE productos SET stock=\"".$diferencia."\" WHERE codigo=\"".$this->codigo."\"";
+            $actualiza = "UPDATE carrito SET stock=\"".$diferencia."\" WHERE codigo=\"".$this->codigo."\"";
             $conexion->exec($actualiza);
         }
     }
