@@ -1,5 +1,5 @@
 <?php
-session_start(); // 1. ¡Fundamental! Iniciar la sesión al principio
+session_start(); 
 require_once '../Model/Usuario.php';
 // Obtenemos los datos de forma segura
 $nombre = $_POST['nombre'] ?? null;
