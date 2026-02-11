@@ -27,14 +27,14 @@ if (isset($_SESSION['user']) || isset($_COOKIE['user'])) {
     if (isset($_POST['logout'])) {
         session_destroy();
         setcookie("user", "", -1);
-        header("Location: login.php");
+        header("Location: Login.php");
         exit();
     }
 
     // Save cookies
     if (isset($_POST['guardarCookies'])) {
         setcookie("user", $_SESSION['user'], time() + 3*24*3600);
-        header("Location: login.php");
+        header("Location: Login.php");
         exit();
     }
 
@@ -63,7 +63,7 @@ if (isset($_SESSION['user']) || isset($_COOKIE['user'])) {
 
     // Show login form
     ?>
-    <form action="" method="post">
+    <form method="post">
         <label>Usuario:</label>
         <input type="text" name="user" required>
         <br>
@@ -71,9 +71,12 @@ if (isset($_SESSION['user']) || isset($_COOKIE['user'])) {
         <input type="password" name="pass" required>
         <br>
         <input type="submit" value="Entrar">
+    </form>
+    <form method="post">
         <input type="submit" name="registrarse" value="Registrarse">
     </form>
     <?php if (isset($error)) echo "<p style='color:red;'>$error</p>"; ?>
+  
     <?php
 }
 

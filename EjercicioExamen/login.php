@@ -47,6 +47,14 @@ function mirarDatos($datos)
     return false;
 }
 
+ if (isset($_POST['recordar'])) {
+setcookie("pass_recordada", $_SESSION['user']['contra'], time() + 3*24*3600);
+        header("Location: login.php");
+        exit();
+    }else{
+        setcookie("pass_recordada", "", time() - 3600);
+    }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -62,10 +70,14 @@ function mirarDatos($datos)
     <input type="text" name="user">
     <br>
     <label>Contraseña:</label>
-    <input type="password" name="passw">
+    <input type="password" name="passw" value="<?= isset($_COOKIE['pass_recordada']) ? $_COOKIE['pass_recordada'] : '' ?>">
+
     <br>
     <input type="hidden" value="<?php echo $_SESSION['user']?>">
     <input type="submit" value="Entrar" name="entrar">
+    <br><br>
+    <label>Recordar</label>
+    <input type="checkbox" name="recordar">
 </form>
 <form method="post" action="registro.php">
     <input type="submit" value="Registrarse" name="registro">

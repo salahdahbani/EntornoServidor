@@ -34,7 +34,7 @@ if (isset($_POST['añadir'])) {
             fclose($file);
             
             // Redirigir al login (corregido el caso de la letra)
-            header('Location: login.php');
+            header('Location: Login.php');
             exit();
         }
     }
@@ -50,7 +50,7 @@ if (isset($_POST['añadir'])) {
 </head>
 <body>
     <h1>Registro</h1>
-    <form action="" method="post">
+    <form method="post">
         <label>Usuario:</label>
         <input type="text" name="user" required>  <!-- 'required' para validación básica en navegador -->
         <br>
@@ -59,7 +59,8 @@ if (isset($_POST['añadir'])) {
         <br>
         <input type="submit" name="añadir" value="Registrarse">
     </form>
-    
+      <br>
+    <a href="Login.php">Volver al login</a>
     <!-- Mostrar errores si existen -->
     <?php if (isset($error)) echo "<p style='color:red;'>$error</p>"; ?>
 </body>
