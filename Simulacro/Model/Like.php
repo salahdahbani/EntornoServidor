@@ -3,7 +3,7 @@ require_once 'FotografiasDB.php';
 require_once 'Usuario.php';
 require_once 'Foto.php';
 class Like {
-	private $id_foto;
+	public $id_foto;
 	private $id_usuario;
 
 	function __construct($id_foto=0, $id_usuario=0) {
@@ -55,6 +55,13 @@ return new Like($registro->id_foto, $registro->id_usuario);
 $conexion=null;
 return false;
 }
+
+public static function borrarLike($id_usuario, $id_foto) {
+$conexion = FotografiasDB::connectDB();
+$borrado = "DELETE FROM likes WHERE id_usuario='$id_usuario' AND id_foto='$id_foto'";
+$conexion->exec($borrado);
+}
+
 public static function getLikeByUsuario($id_usuario) {
 $conexion = FotografiasDB::connectDB();
 $seleccion = "SELECT * FROM likes WHERE id_usuario='$id_usuario'";
@@ -66,6 +73,15 @@ $fotos[] = new Like($registro->id_foto, $registro->id_usuario);
 $conexion=null;
 return $fotos;
 }
+
+public static function countLikesByFoto($id_foto) {
+$conexion = FotografiasDB::connectDB();
+$seleccion = "SELECT COUNT(*) AS total FROM likes WHERE id_foto='$id_foto'";
+$consulta = $conexion->query($seleccion);
+$registro = $consulta->fetchObject();
+return $registro->total;
+}
+
 public static function getUsuarioFotos($id_foto) {
 $conexion = FotografiasDB::connectDB();
 $seleccion = "SELECT * FROM usuarios WHERE id IN (SELECT id_usuario FROM likes WHERE id_foto='$id_foto')";

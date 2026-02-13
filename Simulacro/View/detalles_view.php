@@ -6,21 +6,21 @@
 </head>
 <body>
 <h1>Detalles de la imagen</h1>
-<img src="../View/Images/<?=$data['foto']->getImagen()?>" width="100">
-<p>Autor: <?= $data['usuario']->getNombre() ?></p>
+<img src="../View/imagen/<?=$data['foto']->getImagen()?>" width="100">
+<p>Publicado por: <strong><?= $data['usuario']->getNombre() ?></strong></p>
 <hr>
 <p>Usuarios que han dado like:</p>
 <br>
 <?php
- if (empty($data['usuarios_con_like'])): ?>
+ if (empty($data['usuarios_con_like'])){?>
         <p>Nadie ha dado like todavía.</p>
-    <?php else: ?>
+    <?php } else{ ?>
         <ul>
-            <?php foreach($data['usuarios_con_like'] as $usuarioLike): ?>
+            <?php foreach($data['usuarios_con_like'] as $usuarioLike) { ?>
                 <li><?= $usuarioLike->getNombre() ?></li>
-            <?php endforeach; ?>
+            <?php } ?>
         </ul>
-    <?php endif; ?>
+    <?php } ?>
 
     <hr>
     <br>
