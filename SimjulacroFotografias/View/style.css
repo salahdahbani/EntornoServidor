@@ -1,0 +1,29 @@
+*{
+    margin: 0px;
+}
+div{
+    width: 800px;
+    min-height: 300px;
+    margin: auto;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    border-radius: 10px;
+    box-shadow: 5px 5px 15px black;
+}
+a:link, a:visited{
+    text-decoration: none;
+    color: darkblue;
+    /* padding: 5px;
+    border: 1px solid black;
+    background-color: lightgray;
+    border-radius: 5px; */
+}
+table, td {
+    border-radius: 10px;
+    border-collapse: collapse;
+    border: 1px solid black;
+    margin: auto;
+}

@@ -1,89 +1,43 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Listado de productos</title>
-    <style>
-        /* Estilo base del botón */
-        .btn-votar {
-            text-decoration: none;
-            padding: 5px 10px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            background-color: #f9f9f9;
-            color: #333;
-            transition: all 0.3s ease;
-        }
-
-        /* Estilo cuando ya está VOTADO */
-        .votado {
-            background-color: #ff4757; /* Rojo */
-            color: white !important;
-            border-color: #e84118;
-        }
-
-        table { border-collapse: collapse; width: 100%; }
-        th, td { padding: 10px; text-align: center; }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../View/style.css" type="text/css">
+    <title>Principal</title>
 </head>
 <body>
-    <h1>Galería de Imágenes</h1>
-    <hr>
-    <table border="1">
+<br>
+<div>
+    <table style="margin:auto;" border="1">
+        <tr><th colspan="4"><br><a href="../Controller/perfil.php"><h2><?= $_SESSION['usuario'] ?></h2></a><br><br></th></tr>
+        <tr><th>IMAGEN</th><th>autor</th><th>likes</th><th>Votar</th></tr>
+<?php
+  foreach ($data['fotos'] as $foto) {
+    $estilo="";
+    // El siguiente if es para resaltar la foto con más likes
+    // if ($data['fotoLikes'] && $foto['id']==$data['fotoLikes']->getId()) {
+    //     $estilo="style='background-color:lightgreen;'";
+    // }
+?>
         <tr>
-            <th>Imagen</th>
-            <th>Autor</th>
-            <th>Likes</th>
-            <th>Votar</th>
+            <td><a href="../Controller/detalle.php?id=<?= $foto['id'] ?>"><img src="../View/imagen/<?=$foto['imagen']?>" width="200px" height="100px" alt=""></a></td>
+            <td <?= $estilo ?>><?=$foto['autor']?></td>
+            <td <?= $estilo ?>><?=$foto['likes']?></td>
+            <td <?= $estilo ?>>
+<?php
+        if (Like::getLikeById($foto['id'],$data['id_usuario'])) {
+            echo "<h3>Me gusta</h3>";
+        }else{
+            echo "<a href='../Controller/votar.php?id_foto=$foto[id]'><h3>Dar like</h3></a>";
+        }
+?>
+            </td>
         </tr>
-        <?php
-        foreach($data['usuario'] as $usuario) {
-            foreach($data['foto'] as $foto) {
-                if($foto->getId_usuario() == $usuario->getId()) { 
-                    
-                    // Lógica para el estado del botón
-                    $yaVotado = in_array($foto->getId(), $data['likes_usuario']);
-                    $claseCss = $yaVotado ? "btn-votar votado" : "btn-votar";
-                    $texto = $yaVotado ? "★ Votado" : "☆ Votar";
-                    
-                    // Lógica para contar likes totales de esta foto
-                    $totalLikes = Like::countLikesByFoto($foto->getId());
-        ?>
-                    <tr>
-                        <td>
-                            <a href="../Controller/detalles.php?id_foto=<?=$foto->getId()?>&id_usuario=<?=$usuario->getId()?>">
-                                <img src="../View/imagen/<?=$foto->getImagen()?>" width="100">
-                            </a>
-                        </td>
-                        <td><?=$usuario->getNombre()?></td>
-
-    <td>
-        <?= Like::countLikesByFoto($foto->getId()) ?>
-    </td>
-
-    <td>
-        <?php 
-            // Verificamos si la ID de la foto actual está en el array de likes del usuario
-            $yaVotado = in_array($foto->getId(), $data['likes_usuario']);
-            
-            $claseCss = $yaVotado ? "btn-votar votado" : "btn-votar";
-            $texto = $yaVotado ? "★ Votado" : "☆ Votar";
-        ?>
-        <a class="<?= $claseCss ?>" href="../Controller/votar.php?id_foto=<?= $foto->getId() ?>">
-            <?= $texto ?>
-        </a>
-    </td>
-                    </tr>
-        <?php
-                } 
-            } 
-        } 
-        ?>
+<?php
+  } 
+?>
     </table>
-    <br>
-    <hr>
-    <a href="../Controller/nuevoProducto.php">Nuevo producto</a>
-    <br>
-    <a href="../Controller/logout.php">Volver al inicio</a>
+</div>
 </body>
 </html>
