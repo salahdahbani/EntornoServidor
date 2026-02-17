@@ -17,9 +17,13 @@ if (isset($_REQUEST['login'])) {
     }
 }else if (isset($_REQUEST['registro'])) {
     $_SESSION['usuario']=$_REQUEST['usuario'];
+    if(Usuario::getUsuarioByNombre($_REQUEST['usuario'])){
+        $data['mensaje']="El usuario ya existe";
+    }else{
     $usuario= new Usuario(null, $_REQUEST['usuario'], $_REQUEST['rol']);
     $usuario->insert();
     header("location: ../Controller/index.php");
+    }
 }
     include("../View/iniciosesion_view.php");
 
