@@ -42,6 +42,8 @@ if ($usuarioLogueado) {
 
     // 4. Redirección según el rol
     if ($usuarioLogueado->getRol() === "tecnico") {
+    $usuario= new Usuario(null, $_REQUEST['usuario'], $_REQUEST['rol']);
+    $ticket= Ticket::getAllTickets();
         header("Location: ../Controller/index_admin.php");
     }
     }

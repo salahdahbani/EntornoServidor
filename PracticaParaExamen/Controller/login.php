@@ -17,7 +17,7 @@ if (isset($_REQUEST['login'])) {
     }
 }else if (isset($_REQUEST['registro'])) {
     $_SESSION['usuario']=$_REQUEST['usuario'];
-    $usuario= new Usuario(null, $_REQUEST['usuario'], null);
+    $usuario= new Usuario(null, $_REQUEST['usuario'], $_REQUEST['rol']);
     $usuario->insert();
     header("location: ../Controller/index.php");
 }

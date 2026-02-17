@@ -29,7 +29,7 @@ public static function getUsuarios() {
 
 public function insert() {
 		$conexion = Config::connectDB();
-		$insercion = "INSERT INTO usuarios VALUES (null, '$this->nombre', null)";
+		$insercion = "INSERT INTO usuarios VALUES (null, '$this->nombre', '$this->rol')";
 		$conexion->exec($insercion);
 	}
 

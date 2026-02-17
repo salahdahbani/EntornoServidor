@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Listado de productos</title>
+<title>Listado de tickets</title>
 </head>
 <body>
 <hr>
