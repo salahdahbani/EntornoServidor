@@ -57,5 +57,11 @@ class Receta
         return $this->ingredientes = $ingredientes;
     }
 
+    public function addIngredienteExtra($nuevo) {
+    if (!empty($nuevo)) {
+        $this->ingredientes[] = $nuevo;
+    }
+}
+
     
 }

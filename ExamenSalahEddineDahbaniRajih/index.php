@@ -17,8 +17,19 @@ if(isset($_REQUEST['add_fichero'])){
 }
  $ingredientes = [];
 if(isset($_REQUEST['add_ingrediente'])){
+    $indice = $_REQUEST['receta_idx']; // Necesitamos saber cuál es
     $nuevo_ingre = $_REQUEST['ingre_nuevo'];
-    $ingredientes[] = [$_REQUEST[$nuevo_ingre]];
+
+    if (isset($_SESSION['recetas'][$indice])) {
+        // 1. Sacamos la receta de la sesión
+        $receta = unserialize($_SESSION['recetas'][$indice]);
+        
+        // 2. Usamos el nuevo método que creamos en la clase
+        $receta->addIngredienteExtra($nuevo_ingre);
+        
+        // 3. La volvemos a guardar serializada
+        $_SESSION['recetas'][$indice] = serialize($receta);
+    }
 }
 
 if(isset($_REQUEST['add'])) { 
@@ -73,6 +84,7 @@ if (isset($_POST['confirmar'])) {
 
 if(isset($_POST['empezar_nuevo'])){
     session_destroy();
+    header("Location: index.php");
     }
 
 
@@ -162,23 +174,26 @@ ________________________________________________________________________________
         <th>Ingredientes</th>
     </tr>
     <?php
-    foreach ($_SESSION['recetas'] as $p) {
-        $receta = unserialize($p);
-        echo "<tr>";
+    // Cambia tu foreach por este:
+foreach ($_SESSION['recetas'] as $key => $p) {
+    $receta = unserialize($p);
+    echo "<tr>";
+    echo "<td>" . $receta->getCodigo() . "</td>";
+    echo "<td>" . $receta->getNombre() . "</td>";
+    echo "<td>" . $receta->getTipo() . "</td>";
+    echo "<td>" . implode("<br>-", $receta->getIngredientes()) . "</td>";
+    echo "<td>";
+    echo "<form method='post' style='margin:0; display:flex; gap:5px;'>";
+    
+    // CAMBIO IMPORTANTE: Enviamos la posición de la receta en el array
+    echo "<input type='hidden' name='receta_idx' value='$key'>";
+    
+    echo "<input type='text' name='ingre_nuevo' placeholder='Nuevo...'>";
+    echo "<input type='submit' name='add_ingrediente' value='AÑADIR'>"; 
+    echo "</form>";
+    echo "</td>";
+    echo "</tr>";
 
-        // Código
-        echo "<td>" . $receta->getCodigo() . "</td>";
-        echo "<td>" . $receta->getNombre() . "</td>";
-        echo "<td>" . $receta->getTipo() . "</td>";
-        echo "<td>" . implode("<br>-", $receta->getIngredientes()) . "</td>";
-        echo "<td>";
-        echo "<form method='post' style='margin:0; display:flex; gap:5px; align-items:center;'>";
-        echo "<input type='text' name='ingre_nuevo'>";
-        echo "<input type='submit' name='add_ingrediente' value='AÑADIR INGREDIENTE'>"; 
-        echo "</form>";
-        echo "</td>";
-
-        echo "</tr>";
     }
     ?>
 </table>
