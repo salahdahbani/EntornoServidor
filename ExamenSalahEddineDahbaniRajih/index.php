@@ -1,7 +1,6 @@
 <?php
 include 'Receta.php';
 if (session_status() == PHP_SESSION_NONE) session_start();
-$fichero =[ "fichero1.txt", "fichero2.txt" , "fichero3.txt"];
 
 if(!isset($_SESSION['ficheros'])){
     $_SESSION['ficheros'] = [];
@@ -9,11 +8,8 @@ if(!isset($_SESSION['ficheros'])){
 if(!isset($_SESSION['recetas'])){
     $_SESSION['recetas'] = [];
 }
-if(isset($_REQUEST['add_fichero'])){
-    $nombre_fichero = $_REQUEST['fichero'];
-    $_SESSION['ficheros'] = [
-        'nombre_fichero' => $nombre_fichero
-    ];
+if(isset($_REQUEST['add_fichero']) && isset($_REQUEST['fichero'])) {
+    $_SESSION['ficheros'][] = $_REQUEST['fichero'];
 }
  $ingredientes = [];
 if(isset($_REQUEST['add_ingrediente'])){
@@ -52,7 +48,7 @@ if(isset($_REQUEST['add'])) {
 
 if (isset($_POST['confirmar'])) {
     // lista de ficheros permitidos (evita que pasen rutas arbitrarias)
-    $ficheros_permitidos = ["fichero1.txt", "fichero2.txt", "fichero3.txt"];
+    $ficheros_permitidos = $_SESSION['ficheros'] ?? [];
 
     $fichero_seleccionado = $_POST['fichero_elegido'] ?? '';
 
@@ -82,6 +78,26 @@ if (isset($_POST['confirmar'])) {
     }
 }
 
+if(isset($_REQUEST['cargar_fichero']) && isset($_REQUEST['fichero_elegido'])) {
+    $fichero_seleccionado = $_REQUEST['fichero_elegido'];
+    if (file_exists($fichero_seleccionado)) {
+        $lineas = file($fichero_seleccionado);
+        foreach ($lineas as $linea) {
+            list($codigo, $nombre, $tipo, $ingredientes_str) = explode(',', $linea);
+            $ingredientes = explode('|', $ingredientes_str);
+            $_SESSION['recetas'][] = serialize(new Receta($codigo, $nombre,  $tipo, $ingredientes));
+        }
+    ?>
+</table>
+        <?php
+        $mensaje_accion = "Recetas cargadas desde " . $fichero_seleccionado;
+
+    } else {
+        $mensaje_accion = "Fichero no encontrado.";
+    }
+
+}
+
 if(isset($_POST['empezar_nuevo'])){
     session_destroy();
     header("Location: index.php");
@@ -103,16 +119,19 @@ if(isset($_POST['empezar_nuevo'])){
     Cargar Fichero:
     <select name="fichero_elegido">
         <?php
-        foreach ($fichero as $valor) {
+        if(isset($_SESSION['ficheros'])){
+        foreach ($_SESSION['ficheros'] as $valor) {
             ?>
-
-            <option value="<?= $valor ?>" name="fichero_el"><?= $valor ?></option>
+            <option value="<?= $valor ?>"?><?=$valor?></option>
             <?php
+        }
         }
         ?>
     </select>
         <input type="submit" name="confirmar" value="OK">
-
+        <input type="text" name="fichero" placeholder="Nuevo fichero...">
+        <input type="submit" name="add_fichero" value="AÑADIR FICHERO">
+        <input type="submit" name="cargar_fichero" value="CARGAR RECETAS">
     </form>
    
     <form method="post">
