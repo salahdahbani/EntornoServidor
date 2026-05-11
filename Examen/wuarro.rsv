@@ -1,0 +1,6 @@
+123
+O:7:"Reserva":4:{s:7:"usuario";s:6:"wuarro";s:9:"fechaHora";i:1734256320;s:4:"sala";s:9:"Mercadona";s:6:"estado";s:10:"CONFIRMADA";}
+O:7:"Reserva":4:{s:7:"usuario";s:6:"wuarro";s:9:"fechaHora";i:1734861120;s:4:"sala";s:7:"DEMITrr";s:6:"estado";s:7:"ANULADA";}
+O:7:"Reserva":4:{s:7:"usuario";s:6:"wuarro";s:9:"fechaHora";i:1733997180;s:4:"sala";s:12:"asdasdasdasd";s:6:"estado";s:10:"CONFIRMADA";}
+O:7:"Reserva":4:{s:7:"usuario";s:6:"wuarro";s:9:"fechaHora";i:1734861420;s:4:"sala";s:4:"sudo";s:6:"estado";s:7:"ANULADA";}
+O:7:"Reserva":4:{s:7:"usuario";s:6:"wuarro";s:9:"fechaHora";i:1734100140;s:4:"sala";s:10:"mercadroga";s:6:"estado";s:10:"CONFIRMADA";}

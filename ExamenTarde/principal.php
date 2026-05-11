@@ -9,42 +9,45 @@ $expira = time() + 31536000; // 1 año
 
 function cargar_proyectos($fichero)
 {
-    // Carga los proyectos desde el fichero
+    $proyectos_cargados = [];
     if (file_exists($fichero) && filesize($fichero) > 0) {
-        $contenido = file_get_contents($fichero);
-        $proyectos = unserialize($contenido);
-        if ($proyectos == [] || $proyectos !== false) {
-            return $proyectos;
-        } else {
-            return [];
+        $lineas = file($fichero, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        foreach ($lineas as $linea) {
+            $datos = explode(',', $linea);
+            // El formato es: codigo, descripcion, urgencia, dev1, dev2...
+            $codigo = $datos[0];
+            $descripcion = $datos[1];
+            $urgencia = $datos[2];
+            // El resto son desarrolladores
+            $desarrolladores = array_slice($datos, 3);
+            
+            // Creamos el objeto y lo guardamos SERIALIZADO en el array (como pide tu código)
+            $nuevo_p = new Proyecto($codigo, $descripcion, $urgencia, $desarrolladores);
+            $proyectos_cargados[] = serialize($nuevo_p);
         }
     }
-    return [];
+    return $proyectos_cargados;
 }
 
-function guardar_proyectos_texto($fichero, array $proyectos): void
+function guardar_proyectos_texto($fichero, array $proyectos_serializados): void
 {
     $contenido_texto = '';
-    
-    // Recorremos el array de objetos Proyecto
-    foreach ($proyectos as $p_serializado) {
-        $proyecto = unserialize($p_serializado); // Deserializamos el objeto de la sesión
+    foreach ($proyectos_serializados as $p_serializado) {
+        $proyecto = unserialize($p_serializado);
         
         if ($proyecto instanceof Proyecto) {
-            // Obtenemos los datos, incluyendo la urgencia (que ya está actualizada)
-            $linea = $proyecto->getCodigo() . ',' .
-                     $proyecto->getDescripcion() . ',' .
-                     $proyecto->getUrgencia() . ',' . // <-- La urgencia actualizada
-                     implode(',', $proyecto->getDesarrolladores()) . 
-                     "\n";
-            $contenido_texto .= $linea;
+            // Unimos los datos básicos + los desarrolladores en una sola línea
+            $datos_base = [
+                $proyecto->getCodigo(),
+                $proyecto->getDescripcion(),
+                $proyecto->getUrgencia()
+            ];
+            $linea = implode(',', array_merge($datos_base, $proyecto->getDesarrolladores()));
+            $contenido_texto .= $linea . "\n";
         }
     }
-    
-    // Guardamos la cadena de texto en el fichero
     file_put_contents($fichero, $contenido_texto);
 }
-
 // Inicializar la sesión con los datos del fichero si es la primera vez
 if (!isset($_SESSION['proyecto'])) {
     $_SESSION['proyecto'] = [];

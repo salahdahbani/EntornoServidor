@@ -14,6 +14,12 @@ $_SESSION['user']=[
     'user'=> $user,
     'contra' => $contra,
 ];
+ if(isset($_POST['recordar'])){
+    setcookie("pass_recordada", $_SESSION['user']['contra'], time() + 3*24*3600);
+    }else{
+        setcookie("pass_recordada", "", time() - 3600);
+    }
+
 
 
     $existeUsuario = mirarDatos($datos);
@@ -22,6 +28,7 @@ $_SESSION['user']=[
         echo "<p style='red';>Este usuario no esta registrado </p>";
     }else{
       
+   
     
     fclose($archivo);
     header("Location: principal.php");
@@ -30,6 +37,8 @@ $_SESSION['user']=[
 
 
 }
+
+
 
 function mirarDatos($datos)
 {
@@ -47,13 +56,6 @@ function mirarDatos($datos)
     return false;
 }
 
- if (isset($_POST['recordar'])) {
-setcookie("pass_recordada", $_SESSION['user']['contra'], time() + 3*24*3600);
-        header("Location: login.php");
-        exit();
-    }else{
-        setcookie("pass_recordada", "", time() - 3600);
-    }
 
 ?>
 <!DOCTYPE html>
@@ -70,14 +72,14 @@ setcookie("pass_recordada", $_SESSION['user']['contra'], time() + 3*24*3600);
     <input type="text" name="user">
     <br>
     <label>Contraseña:</label>
-    <input type="password" name="passw" value="<?= isset($_COOKIE['pass_recordada']) ? $_COOKIE['pass_recordada'] : '' ?>">
+    <input type="password" name="passw" value="<?= $_COOKIE['pass_recordada'] ?? '' ?>" required>
 
     <br>
     <input type="hidden" value="<?php echo $_SESSION['user']?>">
     <input type="submit" value="Entrar" name="entrar">
     <br><br>
     <label>Recordar</label>
-    <input type="checkbox" name="recordar">
+    <input type="checkbox" name="recordar" <?= isset($_COOKIE['pass_recordada']) ? 'checked' : '' ?>>
 </form>
 <form method="post" action="registro.php">
     <input type="submit" value="Registrarse" name="registro">
