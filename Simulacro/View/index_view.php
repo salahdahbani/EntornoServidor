@@ -34,11 +34,11 @@
 ?>
             </td>
         </tr>
-<<<<<<< Updated upstream
+
 <?php
   } 
 ?>
-=======
+
         <?php
         foreach($data['usuario'] as $usuario) {
             foreach($data['foto'] as $foto) {
@@ -67,7 +67,7 @@
             } // Fin foreach fotos
         } // Fin foreach usuarios
         ?>
->>>>>>> Stashed changes
+
     </table>
 </div>
 </body>
