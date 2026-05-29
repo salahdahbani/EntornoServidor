@@ -1,7 +1,6 @@
 <?php
 include 'Receta.php';
 if (session_status() == PHP_SESSION_NONE) session_start();
-$fichero =[ "fichero1.txt", "fichero2.txt" , "fichero3.txt"];
 
 if(!isset($_SESSION['ficheros'])){
     $_SESSION['ficheros'] = [];
@@ -9,17 +8,26 @@ if(!isset($_SESSION['ficheros'])){
 if(!isset($_SESSION['recetas'])){
     $_SESSION['recetas'] = [];
 }
-if(isset($_REQUEST['add_fichero'])){
-    $nombre_fichero = $_REQUEST['fichero'];
-    $_SESSION['ficheros'] = [
-        'nombre_fichero' => $nombre_fichero
-    ];
+if(isset($_REQUEST['add_fichero']) && isset($_REQUEST['fichero'])) {
+    $_SESSION['ficheros'][] = $_REQUEST['fichero'];
 }
  $ingredientes = [];
 if(isset($_REQUEST['add_ingrediente'])){
+    $indice = $_REQUEST['receta_idx']; // Necesitamos saber cuál es
     $nuevo_ingre = $_REQUEST['ingre_nuevo'];
-    $ingredientes[] = [$_REQUEST[$nuevo_ingre]];
+
+    if (isset($_SESSION['recetas'][$indice])) {
+        // 1. Sacamos la receta de la sesión
+        $receta = unserialize($_SESSION['recetas'][$indice]);
+        
+        // 2. Usamos el nuevo método que creamos en la clase
+        $receta->addIngredienteExtra($nuevo_ingre);
+        
+        // 3. La volvemos a guardar serializada
+        $_SESSION['recetas'][$indice] = serialize($receta);
+    }
 }
+
 
 if(isset($_REQUEST['add'])) { 
     for ($i = 1; $i <= 5; $i++) {
@@ -41,7 +49,7 @@ if(isset($_REQUEST['add'])) {
 
 if (isset($_POST['confirmar'])) {
     // lista de ficheros permitidos (evita que pasen rutas arbitrarias)
-    $ficheros_permitidos = ["fichero1.txt", "fichero2.txt", "fichero3.txt"];
+    $ficheros_permitidos = $_SESSION['ficheros'] ?? [];
 
     $fichero_seleccionado = $_POST['fichero_elegido'] ?? '';
 
@@ -71,8 +79,89 @@ if (isset($_POST['confirmar'])) {
     }
 }
 
+if(isset($_POST['ELIMINAR'])){
+    $indice = $_REQUEST['receta_idx']; // Necesitamos saber cuál es
+    $ingrediente = $_REQUEST['ingre_a_eliminar']; // El ingrediente que queremos eliminar
+    if (isset($_SESSION['recetas'][$indice])) {
+        // 1. Sacamos la receta de la sesión
+        $receta = unserialize($_SESSION['recetas'][$indice]);
+        
+        // 2. Usamos el nuevo método que creamos en la clase
+        $receta->deleteIngrediente($ingrediente);
+        
+        // 3. La volvemos a guardar serializada
+        $_SESSION['recetas'][$indice] = serialize($receta);
+    }
+}
+
+if(isset($_POST['ELIMINAR_RECETA'])){
+    $indice = $_REQUEST['receta_idx']; // Necesitamos saber cuál es
+    if (isset($_SESSION['recetas'][$indice])) {
+        unset($_SESSION['recetas'][$indice]);
+        $_SESSION['recetas'] = array_values($_SESSION['recetas']); // Reindexar el array
+    }
+}
+
+if(isset($_POST['editar_Ing'])){
+    $indice = $_REQUEST['receta_idx']; // Necesitamos saber cuál es
+    $ingrediente_viejo = $_REQUEST['ingre_viejo']; // El ingrediente que queremos editar
+    $ingrediente_nuevo = $_REQUEST['ingre_nuevo']; // El nuevo ingrediente
+    if (isset($_SESSION['recetas'][$indice])) {
+        // 1. Sacamos la receta de la sesión
+        $receta = unserialize($_SESSION['recetas'][$indice]);
+        
+        // 2. Editamos el ingrediente
+        $ingredientes = $receta->getIngredientes();
+        $pos = array_search($ingrediente_viejo, $ingredientes);
+        if ($pos !== false) {
+            $ingredientes[$pos] = $ingrediente_nuevo;
+            $receta->setIngredientes($ingredientes);
+        }
+        
+        // 3. La volvemos a guardar serializada
+        $_SESSION['recetas'][$indice] = serialize($receta);
+    }
+}
+
+if(isset($_POST['editar'])){
+    $indice = $_REQUEST['receta_idx']; // Necesitamos saber cuál es
+    $nuevo_nombre = $_REQUEST['nombre_nuevo']; // El nuevo nombre
+    if (isset($_SESSION['recetas'][$indice])) {
+        // 1. Sacamos la receta de la sesión
+        $receta = unserialize($_SESSION['recetas'][$indice]);
+        
+        // 2. Editamos el nombre
+        $receta->setNombre($nuevo_nombre);
+        
+        // 3. La volvemos a guardar serializada
+        $_SESSION['recetas'][$indice] = serialize($receta);
+    }
+}
+
+
+if(isset($_REQUEST['cargar_fichero']) && isset($_REQUEST['fichero_elegido'])) {
+    $fichero_seleccionado = $_REQUEST['fichero_elegido'];
+    if (file_exists($fichero_seleccionado)) {
+        $lineas = file($fichero_seleccionado);
+        foreach ($lineas as $linea) {
+            list($codigo, $nombre, $tipo, $ingredientes_str) = explode(',', $linea);
+            $ingredientes = explode('|', $ingredientes_str);
+            $_SESSION['recetas'][] = serialize(new Receta($codigo, $nombre,  $tipo, $ingredientes));
+        }
+    ?>
+</table>
+        <?php
+        $mensaje_accion = "Recetas cargadas desde " . $fichero_seleccionado;
+
+    } else {
+        $mensaje_accion = "Fichero no encontrado.";
+    }
+
+}
+
 if(isset($_POST['empezar_nuevo'])){
     session_destroy();
+    header("Location: index.php");
     }
 
 
@@ -91,16 +180,19 @@ if(isset($_POST['empezar_nuevo'])){
     Cargar Fichero:
     <select name="fichero_elegido">
         <?php
-        foreach ($fichero as $valor) {
+        if(isset($_SESSION['ficheros'])){
+        foreach ($_SESSION['ficheros'] as $valor) {
             ?>
-
-            <option value="<?= $valor ?>" name="fichero_el"><?= $valor ?></option>
+            <option value="<?= $valor ?>"?><?=$valor?></option>
             <?php
+        }
         }
         ?>
     </select>
         <input type="submit" name="confirmar" value="OK">
-
+        <input type="text" name="fichero" placeholder="Nuevo fichero...">
+        <input type="submit" name="add_fichero" value="AÑADIR FICHERO">
+        <input type="submit" name="cargar_fichero" value="CARGAR RECETAS">
     </form>
    
     <form method="post">
@@ -145,6 +237,7 @@ if(isset($_POST['empezar_nuevo'])){
     <input type="checkbox" name="ingrediente5" value="Tomate">
     <br><br>
     <input type="submit" name="add" value="AÑADIR">
+    
 </form>
 <br><br>
 <form method="post">
@@ -162,23 +255,39 @@ ________________________________________________________________________________
         <th>Ingredientes</th>
     </tr>
     <?php
-    foreach ($_SESSION['recetas'] as $p) {
-        $receta = unserialize($p);
-        echo "<tr>";
+    // Cambia tu foreach por este:
+foreach ($_SESSION['recetas'] as $key => $p) {
+    $receta = unserialize($p);
+    echo "<tr>";
+    echo "<td>" . $receta->getCodigo() . "</td>";
+    echo "<td>" . $receta->getNombre() . "</td>";
+    echo "<td>" . $receta->getTipo() . "</td>";
+    echo "<td>" . implode("<br>-", $receta->getIngredientes()) . "</td>";
+    echo "<td>";
+    echo "<form method='post' style='margin:0; display:flex; gap:5px;'>";
+    
+    // CAMBIO IMPORTANTE: Enviamos la posición de la receta en el array
+    // ... dentro del foreach de recetas ...
+echo "<input type='hidden' name='receta_idx' value='$key'>";
 
-        // Código
-        echo "<td>" . $receta->getCodigo() . "</td>";
-        echo "<td>" . $receta->getNombre() . "</td>";
-        echo "<td>" . $receta->getTipo() . "</td>";
-        echo "<td>" . implode("<br>-", $receta->getIngredientes()) . "</td>";
-        echo "<td>";
-        echo "<form method='post' style='margin:0; display:flex; gap:5px; align-items:center;'>";
-        echo "<input type='text' name='ingre_nuevo'>";
-        echo "<input type='submit' name='add_ingrediente' value='AÑADIR INGREDIENTE'>"; 
-        echo "</form>";
-        echo "</td>";
+// 1. Input para AÑADIR (Mantener este nombre)
+echo "<input type='text' name='ingre_nuevo' placeholder='Nuevo...'>";
+echo "<input type='submit' name='add_ingrediente' value='AÑADIR'>";
 
-        echo "</tr>";
+echo "<input type='submit' name='ELIMINAR_RECETA' value='ELIMINAR RECETA'>";
+
+echo "<input type='text' name='ingre_a_eliminar' placeholder='Eliminar ingrediente...'>";
+echo "<input type='submit' name='ELIMINAR' value='ELIMINAR'>";
+
+// 2. Input para EDITAR (Cambiamos el name del segundo ingre_nuevo a ingre_editado)
+echo "<input type='text' name='ingre_viejo' placeholder='Viejo...'>";
+echo "<input type='text' name='ingre_editado' placeholder='Nuevo...'>"; // CAMBIADO AQUÍ
+echo "<input type='submit' name='editar_Ing' value='EDITAR INGREDIENTE'>";
+// ... resto del código ...
+echo "</form>";
+echo "</td>";
+echo "</tr>";
+
     }
     ?>
 </table>

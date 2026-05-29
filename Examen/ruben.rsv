@@ -1,0 +1,4 @@
+123
+O:7:"Reserva":4:{s:7:"usuario";s:5:"ruben";s:9:"fechaHora";i:1734007680;s:4:"sala";s:6:"DEMIT2";s:6:"estado";s:10:"CONFIRMADA";}
+O:7:"Reserva":4:{s:7:"usuario";s:5:"ruben";s:9:"fechaHora";i:1734169800;s:4:"sala";s:6:"fsdfsd";s:6:"estado";s:10:"CONFIRMADA";}
+O:7:"Reserva":4:{s:7:"usuario";s:5:"ruben";s:9:"fechaHora";i:1734184320;s:4:"sala";s:8:"dede2222";s:6:"estado";s:7:"ANULADA";}

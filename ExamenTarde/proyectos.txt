@@ -1,1 +1,6 @@
+<<<<<<< HEAD
 ME939,35rt,Crítica,reter,hgfg,dgdfg
+=======
+BA296,jdnbsjkancjkj  invdsn,Alta,Juan,salah,Juan
+BA334,adad,Crítica,hola,juan,ale
+>>>>>>> 707a7ae7bef1b796aa734c9b85d8b190f3e971c3

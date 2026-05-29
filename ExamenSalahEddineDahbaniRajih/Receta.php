@@ -57,5 +57,32 @@ class Receta
         return $this->ingredientes = $ingredientes;
     }
 
+    public function addIngredienteExtra($nuevo) {
+    if (!empty($nuevo)) {
+        $this->ingredientes[] = $nuevo;
+    }
+}
+
+   public function deleteIngrediente($ingrediente) {
+    $index = array_search($ingrediente, $this->ingredientes);
+    if ($index !== false) {
+        unset($this->ingredientes[$index]);
+        $this->ingredientes = array_values($this->ingredientes); // Reindexar el array
+    }
+
+   }
+
+   public function updateIngrediente($ingredienteViejo, $ingredienteNuevo) {
+    $index = array_search($ingredienteViejo, $this->ingredientes);
+    if ($index !== false) {
+        $this->ingredientes[$index] = $ingredienteNuevo;
+    }
+   }
+    public function updateReceta($nombre, $tipo, $ingredientes) {
+        $this->setNombre($nombre);
+        $this->setTipo($tipo);
+        $this->setIngredientes($ingredientes);
+    }
+
     
 }

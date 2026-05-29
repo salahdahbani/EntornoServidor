@@ -49,9 +49,20 @@
 </form>
 
 <br>
+<<<<<<< HEAD
 
 <?php if (isset($_GET['mensaje'])) { ?>
     <p style="color:green;"><strong><?= $_GET['mensaje']; ?></strong></p>
+=======
+<?php if (isset($_GET['error'])) { ?>
+<p style="color:red;"><strong><?= $_GET['error']; ?></strong></p>
+<?php } ?>
+<?php if (isset($_GET['error2'])) { ?>
+<p style="color:red;"><strong><?= $_GET['error2']; ?></strong></p>
+<?php } ?>
+<?php if (isset($_GET['mensaje'])) { ?>
+<p style="color:green;"><strong><?= $_GET['mensaje']; ?></strong></p>
+>>>>>>> 707a7ae7bef1b796aa734c9b85d8b190f3e971c3
 <?php } ?>
 
 <hr>
@@ -75,8 +86,21 @@ if ($fechaActual > $t->getFecha()) {
 }
 ?>
         <tr style="<?= $style; ?>">
+<<<<<<< HEAD
                 <td><?= $t->getOrigen(); ?></td>
             <td><?= $t->getDestino(); ?></td>
+=======
+            <?php foreach ($ciudades as $c) {
+                if ($c->getId() == $t->getOrigen()) { ?>
+                    <td><?= $c->getNombre(); ?></td>
+                <?php } ?>
+            <?php } ?>
+            <?php foreach ($ciudades as $c) {
+                if ($c->getId() == $t->getDestino()) { ?>
+                    <td><?= $c->getNombre(); ?></td>
+                <?php } ?>
+            <?php } ?>
+>>>>>>> 707a7ae7bef1b796aa734c9b85d8b190f3e971c3
             <td><?= $t->getEmpresa(); ?></td>
 
             <td>
@@ -92,6 +116,15 @@ if ($fechaActual > $t->getFecha()) {
     <?php } ?>
 
 </table>
+<<<<<<< HEAD
+=======
+<hr>
+<form action="../Controller/coonsultaTransporte.php" method="post">
+				<h2>Filtro por nombre</h2>
+				Nombre <input type="text" name="empresa">
+				<input type="submit" name="filtraNombre" value="Filtrar">
+			</form><hr>
+>>>>>>> 707a7ae7bef1b796aa734c9b85d8b190f3e971c3
 
 </body>
 </html>

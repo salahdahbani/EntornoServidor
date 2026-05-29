@@ -18,6 +18,21 @@ if (
         $_POST['empresa']
     );
 
+<<<<<<< HEAD
+=======
+    $fechaHoy=date("Y-m-d");
+    if($transporte->getOrigen() == $transporte->getDestino()) {
+        header("Location: index.php?error=El+origen+y+destino+no+pueden+ser+iguales");
+        exit();
+    }
+
+    
+    if($fechaHoy > $transporte->getFecha()) {
+        header("Location: index.php?error2=La+fecha+no+puede+ser+inferior+a+la+de+hoy");
+        exit();
+    }
+
+>>>>>>> 707a7ae7bef1b796aa734c9b85d8b190f3e971c3
     $transporte->insert();
 
 }

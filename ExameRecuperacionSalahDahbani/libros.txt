@@ -1,0 +1,22 @@
+El cantar del mio cid,prestado,14-04-2026,Robertoberini
+Don Quijote de la Mancha,prestado,5-4-2026,juan
+Don Quijote del Manchon,prestado,14-04-2026,Pepe
+Cien años de soledad,libre,,
+La Odisea,prestado,02-04-2026,María
+Mil novecientos ochenta y cuatro,libre,,
+Orgullo y prejuicio,prestado,12-04-2026,Carlos
+Crónica de una muerte anunciada,libre,,
+El gran Gatsby,prestado,08-04-2026,Elena
+Fahrenheit 451,libre,,
+El principito,prestado,14-04-2026,pepe
+Rayuela,libre,,
+Crimen y castigo,prestado,01-04-2026,Lucía
+Pedro Páramo,libre,,
+Metamorfosis,prestado,10-04-2026,Ricardo
+La ciudad y los perros,libre,,
+Moby Dick,prestado,03-04-2026,Sofía
+El túnel,libre,,
+Cumbres borrascosas,prestado,15-04-2026,Andrés
+La casa de los espíritus,libre,,
+Ensayo sobre la ceguera,prestado,07-04-2026,Beatriz
+El viejo y el mar,libre,,

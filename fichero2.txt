@@ -1,0 +1,50 @@
+¡Me encanta esa actitud! Vamos a subir el nivel. Olvida las recetas; ahora vas a programar un **Sistema de Gestión de una Terminal de Carga de Drones**.
+
+Aquí la lógica cambia: no solo añades cosas, sino que tienes que **gestionar estados** (un paquete puede estar "En espera", "Asignado" o "Enviado") y realizar **cálculos de autonomía**.
+
+---
+
+## 2026: Examen de Programación PHP - Terminal de Drones "SkyLoad"
+
+### 1. El Escenario
+La empresa *SkyLoad* necesita una aplicación web para gestionar los paquetes que sus drones deben repartir. Los paquetes se guardan en una **sesión** hasta que el usuario decide volcarlos a un **archivo de registro** (.txt).
+
+### 2. La Clase `Paquete` (Propiedades y Métodos)
+Debes crear una clase `Paquete.php` con los siguientes requisitos:
+* **Atributos:** `id` (autogenerado), `destino`, `peso` (en kg), `distancia` (en km) y `estado` (por defecto "Pendiente").
+* **Constructor:** Debe recibir destino, peso y distancia. El ID debe generarse combinando las 3 primeras letras del destino en mayúsculas y un número aleatorio (Ej: `MAD-452`).
+* **Método `calcularCoste()`:** El coste es el `peso * 1.2` + `distancia * 0.5`.
+* **Método `setEstado($nuevoEstado)`:** Permite cambiar el estado del paquete.
+
+---
+
+### 3. La Interfaz Principal (`index.php`)
+El archivo debe estar dividido en 3 secciones visuales:
+
+#### A. Registro de Paquetes (Formulario de Entrada)
+* Un formulario para introducir **Destino**, **Peso** y **Distancia**.
+* Al pulsar "Registrar", se crea el objeto, se serializa y se guarda en `$_SESSION['terminal']`.
+* **Novedad (Lógica de Prioridad):** Si el peso es mayor a 10kg, el paquete se considera "Pesado" y debe aparecer **al principio** de la lista (usa `array_unshift`). Si no, al final.
+
+#### B. Gestión de la Terminal (Tabla de Control)
+Muestra una tabla con todos los paquetes de la sesión. Cada fila debe tener:
+1.  Datos del paquete (incluyendo el coste calculado mediante el método de la clase).
+2.  **Acción de Editar:** Un botón o enlace que cambie el estado del paquete de "Pendiente" a "Asignado".
+3.  **Acción de Eliminar:** Un botón para borrar ese paquete específico de la sesión.
+
+#### C. Persistencia y Limpieza
+* **Botón "Despachar a Logística":** Debe recorrer los paquetes de la sesión y escribir en un archivo `logistica.txt` solo aquellos que tengan el estado "Asignado". El formato debe ser CSV: `ID;Destino;Coste`.
+* **Botón "Reiniciar Terminal":** Borra la sesión por completo y redirige para limpiar la memoria.
+
+---
+
+### 4. Lo que este examen te obliga a pensar:
+1.  **Manipulación de Arrays:** No solo es `[] = $valor`. Tienes que usar `array_unshift` según una condición de peso.
+2.  **Edición en Sesión:** Para editar el estado, tendrás que: *Desealizar -> Cambiar Estado -> Serializar -> Guardar de nuevo en la posición exacta*.
+3.  **Filtrado al escribir en archivo:** No guardas todo lo que hay en la sesión, solo lo que cumple la condición `estado == 'Asignado'`.
+4.  **Lógica Visual:** Si un paquete está "Asignado", podrías pintarlo de un color diferente en la tabla (ej. verde).
+
+---
+
+### ¿Por dónde quieres empezar?
+Si quieres, **empresa escribiendo la Clase `Paquete`** y yo te digo si vas por buen camino o si hay algún error de lógica antes de pasar al `index.php`. No olvides usar los `Getters` y `Setters`.

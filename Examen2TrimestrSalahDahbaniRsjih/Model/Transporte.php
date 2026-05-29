@@ -68,6 +68,7 @@ class Transporte {
         $stmt->execute([$this->fecha, $this->id]);
     }
 
+<<<<<<< HEAD
 // 	public function getCiudadId() {
 // $conexion = EscuelaBD::connectDB();
 // $seleccion = "SELECT * FROM ciudad JOIN transporte ON ciudad.id = asignatura_alumno.codigo_asignatura WHERE asignatura_alumno.matricula='$this->matricula'";
@@ -79,6 +80,18 @@ class Transporte {
 // $conexion=null;
 // return $asignaturas;
 // }
+=======
+public static function getTransporteFiltroNombre($cad) {
+        $conexion = LogisticaDB::connectDB();
+        $seleccion = "SELECT id, origen, destino, fecha, empresa FROM transporte WHERE empresa LIKE '%$cad%'";
+        $consulta = $conexion->query($seleccion);
+        $transportes = [];
+        while ($registro = $consulta->fetchObject()) {
+            $transportes[] = new Transporte($registro->id, $registro->origen, $registro->destino, $registro->fecha, $registro->empresa);
+        }
+        return $transportes;
+    }
+>>>>>>> 707a7ae7bef1b796aa734c9b85d8b190f3e971c3
 	
 	public function getId() {
 		return $this->id;
