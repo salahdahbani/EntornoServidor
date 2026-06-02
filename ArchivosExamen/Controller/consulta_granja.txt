@@ -1,0 +1,2 @@
+ID: 4 | Especie: Cabra | Cantidad: 19 | Alimento: Hierba
+ID: 6 | Especie: Caballo | Cantidad: 4 | Alimento: Avena

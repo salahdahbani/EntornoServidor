@@ -4,4 +4,8 @@ jorge,xxx
 lola,ggg
 titi,AAA
 lolo,lll
+<<<<<<< HEAD
 s,s
+=======
+salah,123
+>>>>>>> d8e6c16 (Save my current work before pulling)
