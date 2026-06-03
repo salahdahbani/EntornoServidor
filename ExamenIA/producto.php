@@ -1,5 +1,6 @@
 <?php
 
+
 class producto
 {
     // Atributos de instancia
