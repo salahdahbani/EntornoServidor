@@ -3,6 +3,7 @@ include 'libro.php';
 if (session_status() == PHP_SESSION_NONE) session_start();
   if (!isset($_SESSION['user'])) {
       header("location: login.php");
+      exit;
   }
 $FICHERO_LIBROS = 'libros.txt';
 
@@ -166,8 +167,8 @@ ________________________________________________________________________________
         <th>Nombre</th>
     </tr>
     <?php
-    foreach ($libros as $l ) {
-        $libro = unserialize($l);
+    foreach ($libros as $l_serializado) {
+        $libro = unserialize($l_serializado);
         echo "<tr>";
         $color_desc = "";
         if ($libro->getFecha() == 'prestado') {

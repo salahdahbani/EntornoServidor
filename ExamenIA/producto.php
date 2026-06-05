@@ -7,13 +7,15 @@ class producto
     public $id;
     public $nombre;
     public $precioBase;
+    public $fecha;
 
 
-    public function __construct( $id, $nombre, $precioBase)
+    public function __construct( $id, $nombre, $precioBase, $fecha)
     {
         $this->id = $id;
         $this->nombre = $nombre;
         $this->precioBase = $precioBase;
+        $this->fecha = $fecha;
 
         // El constructor no actualiza las stats para evitar problemas al cargar del fichero.
     }
@@ -88,5 +90,25 @@ class producto
     public function calcularPrecioFinal()
     {
         return $this->precioBase; // En la clase base, el precio final es igual al precio base.
+    }
+
+    /**
+     * Get the value of fecha
+     */ 
+    public function getFecha()
+    {
+        return date("Y/m/d");
+    }
+
+    /**
+     * Set the value of fecha
+     *
+     * @return  self
+     */ 
+    public function setFecha($fecha)
+    {
+        $this->fecha = $fecha;
+
+        return $this;
     }
 }

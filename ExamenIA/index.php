@@ -18,41 +18,53 @@ if (isset($_POST['aniadir'])) {
 
 if (isset($_POST['enviar'])) {
     $fichero_Seleccionado = $_POST['fichero_elegido'] ?? '';
-$productos = [];
+    $productos = [];
     $id = count($_SESSION['productos']) + 1;
     $nombre = $_REQUEST['nombre'];
     $precioBase = $_REQUEST['precioBase'];
     $tasaAduana = 0.15; // Ejemplo de tasa fija del 15%
+    $fecha = null;
 
-    $nuevoProducto = new ProductoImportado($id, $nombre, $precioBase, $tasaAduana);
+    $nuevoProducto = new ProductoImportado($id, $nombre, $precioBase,$fecha, $tasaAduana);
     $_SESSION['productos'][] = $nuevoProducto;
 
     echo "Producto '" . $nombre . "' con precio base " . $precioBase . " ha sido agregado correctamente.";
     $contenido = "";
-foreach ($productos as $producto) {
-    $contenido .= "{$producto->id},{$producto->nombre},{$producto->precioBase},{$producto->tasaAduana}\n";
-}
-file_put_contents($fichero_Seleccionado, $contenido);
+    foreach ($_SESSION['productos'] as $producto) {
+        $contenido .= "{$producto->id},{$producto->nombre},{$producto->precioBase},{$producto->tasaAduana}\n";
+    }
+    if (!empty($fichero_Seleccionado)) {
+        file_put_contents($fichero_Seleccionado, $contenido);
+    } else {
+        echo "Error: No se seleccionó ningún archivo para guardar los datos.";
+    }
 }
 
-if (isset($_POST['confirmar'])){
+if (isset($_POST['confirmar'])) {
     $fichero_Seleccionado = $_POST['fichero_elegido'] ?? '';
     // LEER FICHERO
-$productos = [];
-$lineas = file($fichero_Seleccionado);
+    if (!empty($fichero_Seleccionado) && file_exists($fichero_Seleccionado)) {
+        $productos = [];
+        $lineas = file($fichero_Seleccionado);
+    } else {
+        echo "Error: El archivo no existe o no se ha seleccionado ninguno.";
+    }
 
-foreach ($lineas as $linea) {
-    $partes = explode(",", trim($linea));
-    $nuevoProducto = new ProductoImportado($id, $nombre, $precioBase, $tasaAduana);
-    $nuevoProducto->id = $partes[0];
-    $nuevoProducto->nombre = $partes[1];
-    $nuevoProducto->precioBase = $partes[2];
-    $nuevoProducto->tasaAduana = $partes[3];
-    $productos[] = $nuevoProducto;
+    foreach ($lineas as $linea) {
+        $partes = explode(",", trim($linea));
+        $nuevoProducto = new ProductoImportado($id, $nombre, $precioBase, $fecha, $tasaAduana);
+        $nuevoProducto->id = $partes[0];
+        $nuevoProducto->nombre = $partes[1];
+        $nuevoProducto->precioBase = $partes[2];
+        $nuevoProducto->fecha = $partes[3];
+        $nuevoProducto->tasaAduana = $partes[4];
+        $productos[] = $nuevoProducto;
+    }
 }
+
+if(isset($_GET['cerrar'])){
+    session_destroy();
 }
-
-
 
 ?>
 <!DOCTYPE html>
@@ -78,7 +90,7 @@ foreach ($lineas as $linea) {
 
     <form method="post">
         <label for="fichero_añadido">Fichero Añadido:</label>
-        <input type="text" id="fichero_añadido" name="fichero_añadido" ><br><br>
+        <input type="text" id="fichero_añadido" name="fichero_añadido"><br><br>
         <input type="submit" name="aniadir" value="Añadir"><br><br>
         <label for="fichero_elegido">Cargar Fichero:</label>
         <select name="fichero_elegido">
@@ -106,6 +118,7 @@ foreach ($lineas as $linea) {
             echo "<td>" . $producto->getId() . "</td>";
             echo "<td>" . $producto->getNombre() . "</td>";
             echo "<td>" . $producto->getPrecioBase() . "</td>";
+            echo "<td>" . $producto->getFecha() . "</td>";
             echo "<td>" . $producto->calcularPrecioFinal() . "</td>";
             echo "</tr>";
         }
@@ -114,5 +127,6 @@ foreach ($lineas as $linea) {
 
     ?>
 </body>
+<a href="index.php?cerrar=true">Cerrar sesion</a>
 
 </html>
