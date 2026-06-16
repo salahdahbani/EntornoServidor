@@ -1,0 +1,5 @@
+ID: 2 | Modelo: Toyota RAV4 | Categoria: SUV | Estado: Alquilado
+ID: 5 | Modelo: Fiat 500 | Categoria: Económico | Estado: Disponible
+ID: 8 | Modelo: Volkswagen Touran | Categoria: Familiar | Estado: Alquilado
+ID: 9 | Modelo: Renault Clio | Categoria: Económico | Estado: Disponible
+ID: 10 | Modelo: Kia Sportage | Categoria: SUV | Estado: Alquilado

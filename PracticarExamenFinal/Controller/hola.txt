@@ -1,0 +1,11 @@
+ID: 2 | Modelo: Toyota RAV4 | Categoria: SUV | Estado: Alquilado
+ID: 3 | Modelo: Audi A4 | Categoria: Premium | Estado: Alquilado
+ID: 4 | Modelo: Dacia Jogger | Categoria: Familiar | Estado: Disponible
+ID: 5 | Modelo: Fiat 500 | Categoria: Económico | Estado: Disponible
+ID: 6 | Modelo: Nissan Qashqai | Categoria: SUV | Estado: Alquilado
+ID: 7 | Modelo: BMW Serie 3 | Categoria: Premium | Estado: Alquilado
+ID: 8 | Modelo: Volkswagen Touran | Categoria: Familiar | Estado: Alquilado
+ID: 9 | Modelo: Renault Clio | Categoria: Económico | Estado: Alquilado
+ID: 10 | Modelo: Kia Sportage | Categoria: SUV | Estado: Alquilado
+ID: 15 | Modelo: Hola | Categoria: SUV | Estado: Disponible
+ID: 16 | Modelo: jj | Categoria: Económico | Estado: Alquilado
