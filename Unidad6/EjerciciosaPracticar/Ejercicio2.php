@@ -1,59 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Control de Acceso</title>
+</head>
+<body>
+<h2>Control de Acceso</h2>
+
+<form method="post">
+    <label>Perfil: </label>
+    <select name="perfil">
+        <option value="admin">Admin</option>
+        <option value="estandar">Estándar</option>
+    </select>
+    <br><br>
+    <label>Fila (1-5): </label>
+    <input type="number" name="fila" min="1" max="5">
+    <br><br>
+    <label>Columna (A-E): </label>
+    <input type="text" name="columna" maxlength="1">
+    <br><br>
+    <label>Valor: </label>
+    <input type="number" name="valor">
+    <br><br>
+    <input type="submit" name="enviar" value="Acceder">
+</form>
 <?php
+include "controlAcceso.php";
 
+$mensaje = "";
+$enlace = "";
+$tarjeta_mostrar = "";
 
-function dameTarjeta($perfil){
-    $tarjeta = [];
+if(isset($_POST['enviar'])){
+    $perfil = $_POST['perfil'];
+    $fila = $_POST['fila'];
+    $columna = $_POST['columna'];
+    $valor = $_POST['valor'];
 
-    if($perfil == "admin"){
-    
-        $tarjeta = [
-            ['A'=>12,'B'=>34,'C'=>56,'D'=>78,'E'=>90],
-            ['A'=>11,'B'=>22,'C'=>33,'D'=>44,'E'=>55],
-            ['A'=>10,'B'=>20,'C'=>30,'D'=>40,'E'=>50],
-            ['A'=>9,'B'=>8,'C'=>7,'D'=>6,'E'=>5],
-            ['A'=>1,'B'=>2,'C'=>3,'D'=>4,'E'=>5]
-        ];
+    $tarjeta = dameTarjeta($perfil);
+    $tarjeta_mostrar = imprimeTarjeta($tarjeta);
+
+    if(compruebaClave($tarjeta, $fila, $columna, $valor)){
+        $mensaje = "Acceso correcto";
+        $enlace = "<a href='protegida.php'>Ir a la página protegida</a>";
     } else {
-        $tarjeta = [
-            ['A'=>5,'B'=>10,'C'=>15,'D'=>20,'E'=>25],
-            ['A'=>30,'B'=>35,'C'=>40,'D'=>45,'E'=>50],
-            ['A'=>55,'B'=>60,'C'=>65,'D'=>70,'E'=>75],
-            ['A'=>80,'B'=>85,'C'=>90,'D'=>95,'E'=>100],
-            ['A'=>105,'B'=>110,'C'=>115,'D'=>120,'E'=>125]
-        ];
+        $mensaje = "Acceso incorrecto";
+        $enlace = "<a href='index.php'>Volver a intentar</a>";
     }
-
-    return $tarjeta;
-}
-
-
-function compruebaClave($tarjeta, $fila, $columna, $valor){
-    $fila_index = intval($fila)-1; 
-    if($fila_index < 0 || $fila_index > 4) return false;
-    if(!isset($tarjeta[$fila_index][$columna])) return false;
-
-    if($tarjeta[$fila_index][$columna] == intval($valor)){
-        return true;
-    } else {
-        return false;
-    }
-}
-
-
-function imprimeTarjeta($tarjeta){
-    $html = "<table border='1' cellpadding='5' style='border-collapse:collapse;'>";
-    $html .= "<tr><th></th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th></tr>";
-
-    for($i=0;$i<5;$i++){
-        $html .= "<tr>";
-        $html .= "<td>".($i+1)."</td>";
-        foreach(['A','B','C','D','E'] as $col){
-            $html .= "<td>".$tarjeta[$i][$col]."</td>";
-        }
-        $html .= "</tr>";
-    }
-
-    $html .= "</table>";
-    return $html;
 }
 ?>
+
+<?php
+if($mensaje != ""){
+    echo "<h3>".$mensaje."</h3>";
+    echo $enlace;
+    echo "<h4>Tarjeta del perfil seleccionado:</h4>";
+    echo $tarjeta_mostrar;
+}
+?>
+
+</body>
+</html>
